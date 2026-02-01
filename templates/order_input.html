@@ -111,10 +111,10 @@
         headers: { "X-CSRFToken": "{{ csrf_token }}" },
       },
       columns: [
-        { data: "item_no", className: "text-start" },
-        { data: "item_name", className: "text-start" },
-        { data: "order_price", className: "text-start" },
-        { data: "order_no", className: "text-start" },
+        { data: "item_no", className: "text-start order_input_table_tr" },
+        { data: "item_name", className: "text-start order_input_table_tr" },
+        { data: "order_price", className: "text-start order_input_table_tr" },
+        { data: "order_no", className: "text-start order_input_table_tr" },
         {
           data: "provisional_order",
           className: "text-center",
@@ -132,6 +132,29 @@
         url: "https://cdn.datatables.net/plug-ins/1.13.7/i18n/ja.json",
       },
     });
+
+    // コンテキストメニューの処理
+    $.contextMenu({
+      selector: ".order_input_table_tr",
+      items: {
+        edit: { name: "編集", icon: "edit" },
+        delete: { name: "削除", icon: "delete" },
+        sep1: "----------",
+        quit: { name: "閉じる", icon: "quit" },
+      },
+
+      callback: function (key, options) {
+        const data = table.row(options.$trigger).data();
+        const item_no = data.item_no;
+        //編集クリック時の処理
+        if (key === "edit") {
+          console.log(item_no);
+        } else if (key === "delete") {
+          console.log("削除ボタン" + item_no);
+        }
+      },
+    });
+
     //セレクト2を使用する
     $("#item_no").select2({
       placeholder: "品番を選択してください",
@@ -139,6 +162,7 @@
       theme: "bootstrap-5",
       width: "100%",
     });
+
     //受注ボタンをクリックした時の処理
     $("#order_btn").on("click", function () {
       let fields = {};
