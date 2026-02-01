@@ -48,6 +48,7 @@
         min-height: 100vh;
         background-color: #ffffffcc;
         border-right: 2px solid #444;
+        position: fixed;
       }
       .sidebar .container {
         padding: 10px 15px 0px 15px;
@@ -69,6 +70,7 @@
 
       .main-content {
         width: calc(100% - var(--sidebar-width));
+        margin-left: var(--sidebar-width);
         padding: 2rem;
       }
 
