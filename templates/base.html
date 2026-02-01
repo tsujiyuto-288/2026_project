@@ -64,8 +64,18 @@
         color: #333;
         font-size: 1.25rem;
         padding: 0.8rem 1.5rem;
-        border-radius: 0.25rem;
-        margin-bottom: 0.25rem;
+        border-radius: 0.5rem;
+        margin: 5px 20px;
+      }
+
+      .sidebar .nav-link:hover {
+        background-color: rgb(176, 195, 255);
+        margin: 5px 20px;
+      }
+
+      .sidebar .nav-link-active {
+        background-color: rgb(105, 140, 255);
+        margin: 5px 20px;
       }
 
       .main-content {
@@ -135,6 +145,21 @@
     <!--jQuery ContextMenu-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.ui.position.js"></script>
+
+    <!--サイドバーでアクティブなものに色をつける-->
+    <script>
+      $(document).ready(function () {
+        const path = window.location.pathname;
+        $(".sidebar")
+          .find(".nav-link")
+          .each(function () {
+            if ($(this).attr("href") == path) {
+              $(this).addClass("nav-link-active");
+            }
+          });
+      });
+    </script>
+
     {% block extra_js %}{% endblock extra_js %}
   </body>
 </html>
