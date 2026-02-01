@@ -58,9 +58,8 @@
         </div>
       </div>
     </div>
-    <div class="d-flex justify-content-center gap-4 py-3">
+    <div class="d-flex justify-content-center py-3">
       <button id="save_btn" class="btn btn-primary btn-lg px-5">登録</button>
-      <button id="delete_btn" class="btn btn-danger btn-lg px-5">削除</button>
     </div>
   </div>
   <div class="card">
@@ -303,7 +302,7 @@
       $.ajax({
         url: url,
         type: "POST",
-        data: { 
+        data: {
           fields: JSON.stringify(fields),
           kubun: "edit_item",
         },
