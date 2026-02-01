@@ -131,16 +131,15 @@
       },
 
       callback: function (key, options) {
+        const data = table.row(options.$trigger).data();
         if (key === "edit") {
-          const tr = options.$trigger;
-          const data = table.row(tr).data();
           const item_no = data.item_no;
           $("#editModal").modal("show");
-          const edit_data_id = [];
+          const edit_item_no = [];
           $("#editModal")
             .find("input, select")
             .each(function () {
-              edit_data_id.push($(this).data("id"));
+              edit_item_no.push($(this).data("id"));
             });
           $("#editModal")
             .find("input, select")
@@ -160,10 +159,7 @@
                   break;
               }
             });
-          console.log(edit_data_id);
         } else if (key === "delete") {
-          const tr = options.$trigger;
-          const data = table.row(tr).data();
           delete_item_no["item_no"] = data.item_no;
           console.log(delete_item_no);
           $("#item-deleteModal").css("display", "flex");
@@ -270,7 +266,6 @@
     });
 
     //削除モーダル内の処理
-    //この削除処理は仮のものです。
     $(".modal-close").on("click", function () {
       $("#item-deleteModal").css("display", "none");
     });
@@ -284,7 +279,7 @@
       dropdownParent: $("#editModal"),
     });
 
-    // モーダルの登録ボタンをクリック時の処理
+    // モーダルの登録ボタン(編集ボタン)をクリック時の処理
     $("#save_edit_btn").on("click", function () {
       let fields = {};
       $("#editModal")
