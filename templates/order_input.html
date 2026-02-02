@@ -152,7 +152,21 @@
         } else if (key === "shipping") {
           const order_no = data.order_no;
           console.log(order_no);
-          $.(ajax)
+          $.ajax({
+            url: url,
+            type: "POST",
+            data: {
+              data: order_no,
+              kubun: "shipping_order",
+            },
+            headers: { "X-CSRFToken": "{{ csrf_token }}" },
+          }).done(function (response) {
+            if (response.status === "success") {
+              alert(response.data + "を出荷しました。");
+            } else {
+              alert("予期せぬエラーです");
+            }
+          });
         } else if (key === "delete") {
           console.log("削除ボタン" + item_no);
         }

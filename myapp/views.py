@@ -77,6 +77,8 @@ class Order_input(View):
             return self.get_item(request)
         if request.POST.get("kubun") == "save_order":
             return self.save_order(request)
+        if request.POST.get("kubun") == "shipping_order":
+            return self.shipping_order(request)
 
     def save_order(self,request):
         fields = json.loads(request.POST.get('fields'))
@@ -94,6 +96,13 @@ class Order_input(View):
     def get_item(self,request):
         orders = list(Order.objects.all().values())
         return JsonResponse({"data": orders})
+
+    def shipping_order(self,request):
+        order_no = request.POST.get("data")
+        
+        Order.objects.filter(order_no=order_no).update(shipping_order=True)
+        return JsonResponse({"status":"success","data":order_no})
+        
 
 class Shipping_list(View):
     def get(self,request):
