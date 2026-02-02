@@ -138,6 +138,7 @@
       selector: ".order_input_table_tr",
       items: {
         edit: { name: "編集", icon: "edit" },
+        shipping: { name: "出荷", icon: "bi bi-truck" },
         delete: { name: "削除", icon: "delete" },
         sep1: "----------",
         quit: { name: "閉じる", icon: "quit" },
@@ -148,7 +149,6 @@
         const item_no = data.item_no;
         //編集クリック時の処理
         if (key === "edit") {
-          console.log(item_no);
         } else if (key === "delete") {
           console.log("削除ボタン" + item_no);
         }
