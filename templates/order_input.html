@@ -160,7 +160,9 @@
         }
       },
     });
+
     //--------------出荷モーダル内の処理--------------------
+
     //出荷モーダルで出荷ボタンをクリック
     $("#shipping_order_btn").on("click", function () {
       console.log(order_no + "出荷モーダルの出荷ボタン");
@@ -181,6 +183,13 @@
         }
       });
     });
+
+    //閉じるボタンを押した時の処理
+    $(".close_shipping_modal_btn").on("click", function () {
+      $("#order_input_shipping_modal").modal("hide");
+    });
+
+    //-----------------------------------------------
 
     //セレクト2を使用する
     $("#item_no").select2({
