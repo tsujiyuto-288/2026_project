@@ -95,8 +95,8 @@
     </div>
   </div>
 </div>
-
-{% endblock content %} {% block extra_js %}
+<!-- prettier-ignore -->
+{% include 'modals/order_input_shipping_modal.html' %} {% endblock content %} {% block extra_js %}
 <script>
   $(document).ready(function () {
     const url = "{% url 'order_input' %}";
@@ -134,6 +134,7 @@
     });
 
     // コンテキストメニューの処理
+    let order_no; //order_noはクリックしたテーブルの注文番号が入る。複数の関数で使用したいため外に出している。
     $.contextMenu({
       selector: ".order_input_table_tr",
       items: {
@@ -150,27 +151,35 @@
         //編集クリック時の処理
         if (key === "edit") {
         } else if (key === "shipping") {
-          const order_no = data.order_no;
+          order_no = data.order_no;
+          $("#shipping_order_no").text(order_no);
+          $("#order_input_shipping_modal").modal("show");
           console.log(order_no);
-          $.ajax({
-            url: url,
-            type: "POST",
-            data: {
-              data: order_no,
-              kubun: "shipping_order",
-            },
-            headers: { "X-CSRFToken": "{{ csrf_token }}" },
-          }).done(function (response) {
-            if (response.status === "success") {
-              alert(response.data + "を出荷しました。");
-            } else {
-              alert("予期せぬエラーです");
-            }
-          });
         } else if (key === "delete") {
           console.log("削除ボタン" + item_no);
         }
       },
+    });
+    //--------------出荷モーダル内の処理--------------------
+    //出荷モーダルで出荷ボタンをクリック
+    $("#shipping_order_btn").on("click", function () {
+      console.log(order_no + "出荷モーダルの出荷ボタン");
+      $.ajax({
+        url: url,
+        type: "POST",
+        data: {
+          data: order_no,
+          kubun: "shipping_order",
+        },
+        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+      }).done(function (response) {
+        if (response.status === "success") {
+          $("#order_input_shipping_modal").modal("hide");
+          alert(response.data + "を出荷しました。");
+        } else {
+          alert("予期せぬエラーです");
+        }
+      });
     });
 
     //セレクト2を使用する
