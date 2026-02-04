@@ -174,9 +174,13 @@
       }).done(function (response) {
         if (response.status === "success") {
           $("#order_input_shipping_modal").modal("hide");
-          alert(response.data + "を出荷しました。");
+          Lobibox.notify("success", {
+            position: "top right",
+            msg: response.data + "を出荷しました。",
+            icon: "bi bi-check-circle-fill",
+          });
         } else {
-          alert("予期せぬエラーです");
+          alert("予期せぬエラーです"); //エラーの場合はalertでいい
         }
       });
     });
@@ -214,7 +218,11 @@
 
       for (const check in fields) {
         if (fields[check] === "") {
-          alert("未記入の項目があります。");
+          Lobibox.notify("error", {
+            position: "top right",
+            msg: "未記入の項目があります。",
+            icon: "bi bi-x-circle-fill",
+          });
           return;
         }
       }
@@ -244,13 +252,21 @@
                   $(this).val("");
               }
             });
-          alert("品番" + response.message + "の登録に成功しました。");
+          Lobibox.notify("success", {
+            position: "top right",
+            msg: response.message + "の登録に成功しました。",
+            icon: "bi bi-check-circle-fill",
+          });
           //重複の場合
         } else if (response.status == "error_duplicate") {
-          alert("品番" + response.message + "が重複しています。");
+          Lobibox.notify("error", {
+            position: "top right",
+            msg: "注番" + response.message + "は重複しています。",
+            icon: "bi bi-x-circle-fill",
+          });
           //その他の失敗の場合
         } else {
-          alert("無効なリクエストです。");
+          alert("無効なリクエストです。"); //エラーの場合はalertでいい
         }
       });
     });
