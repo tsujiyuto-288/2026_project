@@ -154,9 +154,7 @@
           order_no = data.order_no;
           $("#shipping_order_no").text(order_no);
           $("#order_input_shipping_modal").modal("show");
-          console.log(order_no);
         } else if (key === "delete") {
-          console.log("削除ボタン" + item_no);
         }
       },
     });
@@ -165,7 +163,6 @@
 
     //出荷モーダルで出荷ボタンをクリック
     $("#shipping_order_btn").on("click", function () {
-      console.log(order_no + "出荷モーダルの出荷ボタン");
       $.ajax({
         url: url,
         type: "POST",

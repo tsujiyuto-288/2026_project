@@ -161,7 +161,6 @@
             });
         } else if (key === "delete") {
           delete_item_no["item_no"] = data.item_no;
-          console.log(delete_item_no);
           $("#item-deleteModal").css("display", "flex");
         }
       },
@@ -182,7 +181,6 @@
               fields[$(this).data("id")] = $(this).val();
           }
         });
-      console.log(fields);
 
       for (const check in fields) {
         if (fields[check] === "") {
@@ -230,7 +228,6 @@
         return;
         alert("品番が選択れていません。");
       }
-      console.log(fields);
       $.ajax({
         url: url,
         type: "POST",
@@ -293,7 +290,6 @@
               fields[$(this).data("id")] = $(this).val();
           }
         });
-      console.log(fields);
       $.ajax({
         url: url,
         type: "POST",
