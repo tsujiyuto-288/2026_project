@@ -94,7 +94,7 @@ class Order_input(View):
         return JsonResponse({'status': 'success', 'message': orders.order_no})
 
     def get_item(self,request):
-        orders = list(Order.objects.all().values())
+        orders = list(Order.objects.filter(shipping_order=False).values())
         return JsonResponse({"data": orders})
 
     def shipping_order(self,request):

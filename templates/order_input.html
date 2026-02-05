@@ -179,6 +179,7 @@
             msg: response.data + "を出荷しました。",
             icon: "bi bi-check-circle-fill",
           });
+          table.ajax.reload();
         } else {
           alert("予期せぬエラーです"); //エラーの場合はalertでいい
         }
