@@ -79,6 +79,8 @@ class Order_input(View):
             return self.save_order(request)
         if request.POST.get("kubun") == "shipping_order":
             return self.shipping_order(request)
+        if request.POST.get("kubun") == "delete_order":
+            return self.delete_order(request)
 
     def save_order(self,request):
         fields = json.loads(request.POST.get('fields'))
@@ -98,11 +100,25 @@ class Order_input(View):
         return JsonResponse({"data": orders})
 
     def shipping_order(self,request):
-        order_no = request.POST.get("data")
+        shipping_order_no = request.POST.get("data")
         
-        Order.objects.filter(order_no=order_no).update(shipping_order=True)
-        return JsonResponse({"status":"success","data":order_no})
+        Order.objects.filter(order_no=shipping_order_no).update(shipping_order=True)
+        return JsonResponse({"status":"success","data":shipping_order_no})
         
+    def delete_order(self,request):
+        delete_order_no = request.POST.get("data")
+
+        delete_order = Order.objects.filter(order_no = delete_order_no)
+        
+        #削除対象がある時
+        if delete_order:
+            delete_order.delete()
+            return JsonResponse({"status":"success","delete_order":delete_order_no})
+
+        #削除対象が存在しない場合。　ただ削除対象をクリックしてここに辿り着くので削除対象がないのは何かしらの問題が起きている
+        return JsonResponse({"status":"error"})
+
+
 
 class Shipping_list(View):
     def get(self,request):

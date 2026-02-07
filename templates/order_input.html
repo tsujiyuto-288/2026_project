@@ -96,7 +96,7 @@
   </div>
 </div>
 <!-- prettier-ignore -->
-{% include 'modals/order_input_shipping_modal.html' %} {% endblock content %} {% block extra_js %}
+{% include 'modals/order_input_shipping_modal.html' %} {% include 'modals/order_delete_modal.html' %} {% endblock content %} {% block extra_js %}
 <script>
   $(document).ready(function () {
     const url = "{% url 'order_input' %}";
@@ -148,13 +148,18 @@
       callback: function (key, options) {
         const data = table.row(options.$trigger).data();
         const item_no = data.item_no;
-        //編集クリック時の処理
+        order_no = data.order_no;
+
+        //編集選択時の処理
         if (key === "edit") {
+          //ここに編集時の処理をあとで書く
+          //出荷選択時の処理
         } else if (key === "shipping") {
-          order_no = data.order_no;
           $("#shipping_order_no").text(order_no);
           $("#order_input_shipping_modal").modal("show");
+          //削除選択時の処理
         } else if (key === "delete") {
+          $("#order-deleteModal").css("display", "flex");
         }
       },
     });
@@ -194,8 +199,38 @@
     //-----------------------------------------------
 
     //--------------削除モーダル内の処理-------------------
+    $("#delete-order-btn").on("click", function () {
+      $.ajax({
+        url: url,
+        type: "POST",
+        data: {
+          data: order_no,
+          kubun: "delete_order",
+        },
+        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+      }).done(function (response) {
+        if (response.status === "success") {
+          table.ajax.reload();
+          $("#order-deleteModal").css("display", "none");
 
-    //-----------------------------------------------
+          Lobibox.notify("success", {
+            position: "top right",
+            msg: "品番" + response.delete_order + "の削除に成功しました。",
+            icon: "bi bi-check-circle-fill",
+          });
+        } else if (response.status === "error") {
+          table.ajax.reload();
+          $("#order-deleteModal").css("display", "none");
+          Lobibox.notify("error", {
+            position: "top right",
+            msg: "予期せぬエラーが発生しました。", //予期せぬよラー表示の理由は、削除対象をクリックしているのに削除対象が見つからないという条件で走るから
+            icon: "bi bi-x-circle-fill",
+          });
+        }
+      });
+    });
+
+    //--------------------------------------------------
 
     //セレクト2を使用する
     $("#item_no").select2({
