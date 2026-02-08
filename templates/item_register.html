@@ -184,11 +184,7 @@
 
       for (const check in fields) {
         if (fields[check] === "") {
-          Lobibox.notify("error", {
-            position: "top right",
-            msg: "未記入の項目があります。",
-            icon: "bi bi-x-circle-fill",
-          });
+          LobiboxError("未記入の項目があります");
           return;
         }
       }
@@ -211,21 +207,13 @@
           $("#item_name").val("");
           $("#item_price").val("");
           $("#item_deleted").prop("checked", false);
-          Lobibox.notify("success", {
-            position: "top right",
-            msg: "品番" + response.message + "の登録に成功しました。",
-            icon: "bi bi-check-circle-fill",
-          });
+          LobiboxSuccess("品番" + response.message + "の登録に成功しました。");
           //重複の場合
         } else if (response.status == "error_duplicate") {
-          Lobibox.notify("error", {
-            position: "top right",
-            msg: "品番" + response.message + "が重複しています。",
-            icon: "bi bi-x-circle-fill",
-          });
+          LobiboxError("品番" + response.message + "が重複しています。");
           //その他の失敗の場合
         } else {
-          alert("無効なリクエストです。");
+          alert("予想外のエラーです");
         }
       });
     });
@@ -236,12 +224,8 @@
         item_no: $("#item_no").val(),
       };
       if (fields["item_no"] === "") {
+        LobiboxError("品番が未選択です。");
         return;
-        Lobibox.notify("error", {
-          position: "top right",
-          msg: "品番が選択されていません。",
-          icon: "bi bi-x-circle-fill",
-        });
       }
       $.ajax({
         url: url,
@@ -259,18 +243,10 @@
           $("#item_no").val("");
           $("#item_name").val("");
           $("#item_price").val("");
-          Lobibox.notify("success", {
-            position: "top right",
-            msg: "品番" + response.message + "の削除に成功しました。",
-            icon: "bi bi-check-circle-fill",
-          });
+          LobiboxSuccess("品番" + response.message + "の削除に成功しました。");
           //品番がない場合
         } else if (response.status == "error_nai") {
-          Lobibox.notify("error", {
-            position: "top right",
-            msg: "品番" + response.message + "が存在しません。",
-            icon: "bi bi-x-circle-fill",
-          });
+          LobiboxError("品番" + response.message + "が存在しません。");
         } else {
           alert("無効なリクエストです。");
         }
@@ -324,18 +300,13 @@
       }).done(function (response) {
         table.ajax.reload();
         if (response.status === "success") {
-          Lobibox.notify("success", {
-            position: "top right",
-            msg: "編集に成功しました。",
-            icon: "bi bi-check-circle-fill",
-          });
+          console.log("てすと");
+          LobiboxSuccess("編集に成功しました");
           $("#editModal").modal("hide");
+        } else if (response.status === "kuran_error") {
+          LobiboxError("未記入の項目があります");
         } else {
-          Lobibox.notify("error", {
-            position: "top right",
-            msg: "編集に失敗しました。",
-            icon: "bi bi-x-circle-fill",
-          });
+          alert("想定外のエラーです。");
         }
       });
     });
@@ -355,17 +326,9 @@
         table.ajax.reload();
         $("#item-deleteModal").fadeOut();
         if (response.status === "success") {
-          Lobibox.notify("success", {
-            position: "top right",
-            msg: "削除しました。",
-            icon: "bi bi-check-circle-fill",
-          });
+          LobiboxSuccess("削除に成功しました");
         } else {
-          Lobibox.notify("error", {
-            position: "top right",
-            msg: "削除に失敗しました。",
-            icon: "bi bi-x-circle-fill",
-          });
+          LobiboxError("削除に失敗しました");
         }
       });
     });
