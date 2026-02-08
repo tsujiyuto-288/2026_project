@@ -58,9 +58,10 @@ class Item_register(View):
     def edit_item(self, request):
         fields = json.loads(request.POST.get("fields"))
 
-        items = Item(**fields)
+        if not fields.get("item_no") or not fields.get("item_name") or not fields.get("item_price"):
+            return JsonResponse({"status":"kuran_error"})
 
-        if Item.objects.filter(item_no=items.item_no).update(**fields):
+        if Item.objects.filter(item_no=fields.get("item_no")).update(**fields):
             return JsonResponse({"status":"success"})
         
         return JsonResponse({"status":"error"})
@@ -115,7 +116,7 @@ class Order_input(View):
             delete_order.delete()
             return JsonResponse({"status":"success","delete_order":delete_order_no})
 
-        #削除対象が存在しない場合。　ただ削除対象をクリックしてここに辿り着くので削除対象がないのは何かしらの問題が起きている
+        #削除対象が存在しない場合。　ただ削除対象をクリックしてここに辿り着くので削除対象がないのは何かしらの問題　　　　　　が起きている
         return JsonResponse({"status":"error"})
 
 
