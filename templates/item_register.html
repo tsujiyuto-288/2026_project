@@ -161,7 +161,7 @@
             });
         } else if (key === "delete") {
           delete_item_no["item_no"] = data.item_no;
-          $("#item-deleteModal").css("display", "flex");
+          showModalFadeIn("#item-deleteModal");
         }
       },
     });
@@ -287,7 +287,7 @@
 
     //削除モーダル内の処理
     $(".modal-close").on("click", function () {
-      $("#item-deleteModal").css("display", "none");
+      $("#item-deleteModal").fadeOut();
     });
 
     //セレクト2を使用する
@@ -353,7 +353,7 @@
         headers: { "X-CSRFToken": "{{ csrf_token }}" },
       }).done(function (response) {
         table.ajax.reload();
-        $("#item-deleteModal").css("display", "none");
+        $("#item-deleteModal").fadeOut();
         if (response.status === "success") {
           Lobibox.notify("success", {
             position: "top right",

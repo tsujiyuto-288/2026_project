@@ -168,6 +168,21 @@
       });
     </script>
 
+    <!--ヘルパー関数たち-->
+    <script>
+      //モーダルをfadeInしてくれる関数
+      function showModalFadeIn(modalId) {
+        $(modalId)
+          .css({
+            display: "flex",
+            opacity: 0,
+          })
+          .animate({
+            opacity: 1,
+          });
+      }
+    </script>
+
     {% block extra_js %}{% endblock extra_js %}
   </body>
 </html>
