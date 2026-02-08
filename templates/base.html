@@ -181,6 +181,23 @@
             opacity: 1,
           });
       }
+      //lobibox 成功通知
+      function LobiboxSuccess(message) {
+        Lobibox.notify("success", {
+          position: "top right",
+          msg: message,
+          icon: "bi bi-check-circle-fill",
+        });
+      }
+
+      //lobibox 失敗通知
+      function LobiboxError(message) {
+        Lobibox.notify("error", {
+          position: "top right",
+          msg: message,
+          icon: "bi bi-x-circle-fill",
+        });
+      }
     </script>
 
     {% block extra_js %}{% endblock extra_js %}
