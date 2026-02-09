@@ -15,11 +15,5 @@ class Order(models.Model):
     order_no = models.CharField(max_length=50)
     provisional_order = models.BooleanField(default=False)
     shipping_order = models.BooleanField(default=False)
-
-class Shipping(models.Model):
-    shipping_date = models.DateField()
-    item_no = models.CharField(max_length=50)
-    item_name = models.CharField(max_length=50)
-    order_no = models.CharField(max_length=50)
-    unit_price = models.IntegerField()
-    shipping_quantity = models.IntegerField()
+    shipping_date = models.CharField(max_length=50)
+    shipping_quantity = models.CharField(max_length=50)

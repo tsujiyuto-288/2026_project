@@ -1,7 +1,7 @@
 from django.http import JsonResponse, HttpResponse
 import json
 from django.shortcuts import render
-from .models import Item, Order,Shipping
+from .models import Item, Order
 from django.views import View
 import json
 
@@ -67,7 +67,6 @@ class Item_register(View):
         return JsonResponse({"status":"error"})
 
 
-
 class Order_input(View):
     def get(self, request):
         items = list(Item.objects.all().values())
@@ -104,6 +103,8 @@ class Order_input(View):
         shipping_order_no = request.POST.get("data")
         
         Order.objects.filter(order_no=shipping_order_no).update(shipping_order=True)
+        Order.objects.filter(order_no=shipping_order_no).update(shipping_data="フロントから来た日付")#日付を入力できるようにする
+        Order.objects.filter(order_no=shipping_order_no).update(shipping_quantity="フロントから来た数量")#数量をh入力できるように編集する
         return JsonResponse({"status":"success","data":shipping_order_no})
         
     def delete_order(self,request):
@@ -120,9 +121,9 @@ class Order_input(View):
         return JsonResponse({"status":"error"})
 
 
-
 class Shipping_list(View):
     def get(self,request):
+        #shippings = list(Order.objects.filter(shipping_order=True).values())
         return render(request, 'shipping_list.html')
     
     def post(self,request):
@@ -130,6 +131,6 @@ class Shipping_list(View):
             return self.get_item(request)
 
     def get_item(self,request):
-        shippings = list(Shipping.objects.all().values())
+        shippings = list(Order.objects.filter(shipping_order=True).values())
         return JsonResponse({'data':shippings})
 
