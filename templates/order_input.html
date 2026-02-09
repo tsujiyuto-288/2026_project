@@ -81,10 +81,10 @@
       <table id="order_table" class="table table-striped table-hover w-100">
         <thead>
           <tr>
+            <th>注文番号</th>
             <th>品番</th>
             <th>品名</th>
             <th>単価</th>
-            <th>注文番号</th>
             <th>仮受注</th>
           </tr>
         </thead>
@@ -111,10 +111,10 @@
         headers: { "X-CSRFToken": "{{ csrf_token }}" },
       },
       columns: [
+        { data: "order_no", className: "text-start order_input_table_tr" },
         { data: "item_no", className: "text-start order_input_table_tr" },
         { data: "item_name", className: "text-start order_input_table_tr" },
         { data: "order_price", className: "text-start order_input_table_tr" },
-        { data: "order_no", className: "text-start order_input_table_tr" },
         {
           data: "provisional_order",
           className: "text-center",
