@@ -117,7 +117,7 @@ class Order_input(View):
             delete_order.delete()
             return JsonResponse({"status":"success","delete_order":delete_order_no})
 
-        #削除対象が存在しない場合。　ただ削除対象をクリックしてここに辿り着くので削除対象がないのは何かしらの問題　　　　　　が起きている
+        #削除対象が存在しない場合。　ただ削除対象をクリックしてここに辿り着くので削除対象がないのは何かしらの問題が起きている
         return JsonResponse({"status":"error"})
 
 
