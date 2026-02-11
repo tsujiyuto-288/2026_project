@@ -32,7 +32,7 @@
             placeholder="品名"
           />
         </div>
-        <div class="content h-50 d-flex align-items-center">
+        <div class="h-50 d-flex align-items-center">
           <div class="form-check">
             <input
               class="form-check-input"
@@ -96,7 +96,7 @@
   </div>
 </div>
 <!-- prettier-ignore -->
-{% include 'modals/order_input_shipping_modal.html' %} {% include 'modals/order_delete_modal.html' %} {% endblock content %} {% block extra_js %}
+{% include 'modals/order_input_shipping_modal.html' %}{% include 'modals/order_edit_modal.html' %} {% include 'modals/order_delete_modal.html' %} {% endblock content %} {% block extra_js %}
 <script>
   $(document).ready(function () {
     const url = "{% url 'order_input' %}";
@@ -152,7 +152,7 @@
 
         //編集選択時の処理
         if (key === "edit") {
-          //ここに編集時の処理をあとで書く
+          $("#order_edit_modal").modal("show");
           //出荷選択時の処理
         } else if (key === "shipping") {
           $("#shipping_order_no").text(order_no);
@@ -163,6 +163,13 @@
         }
       },
     });
+
+    //--------------｟編集モーダル内の処理｠--------------------
+    $(".close_order_edit_modal_btn").on("click", function () {
+      $("#order_edit_modal").modal("hide");
+    });
+
+    //-----------------------------------------------------
 
     //--------------｟出荷モーダル内の処理｠--------------------
 
