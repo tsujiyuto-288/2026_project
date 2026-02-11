@@ -28,9 +28,7 @@
 </div>
 
 {% endblock content %} {% block extra_js %}
-<!--
 <script>
-
   $(document).ready(function () {
     const url = "{% url 'shipping_list' %}";
     const table = new DataTable("#shipping_table", {
@@ -43,12 +41,18 @@
         headers: { "X-CSRFToken": "{{ csrf_token }}" },
       },
       columns: [
-        { data: "shipping_date" },
-        { data: "item_no" },
-        { data: "item_name" },
-        { data: "order_no" },
-        { data: "unit_price" },
-        { data: "shipping_quantity" },
+        {
+          data: "shipping_date",
+          className: "text-start item_register_table_tr",
+        },
+        { data: "item_no", className: "text-start item_register_table_tr" },
+        { data: "item_name", className: "text-start item_register_table_tr" },
+        { data: "order_no", className: "text-start item_register_table_tr" },
+        { data: "order_price", className: "text-start item_register_table_tr" },
+        {
+          data: "shipping_quantity",
+          className: "text-start item_register_table_tr"
+        },
       ],
       language: {
         url: "https://cdn.datatables.net/plug-ins/1.13.7/i18n/ja.json",
@@ -56,5 +60,4 @@
     });
   });
 </script>
--->
 {% endblock extra_js %}
