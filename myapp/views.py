@@ -100,11 +100,18 @@ class Order_input(View):
         return JsonResponse({"data": orders})
 
     def shipping_order(self,request):
-        shipping_order_no = request.POST.get("data")
-        
+        shipping_order = json.loads(request.POST.get("data"))
+
+        shipping_order_no = shipping_order.get("order_no")
+        shipping_order_date = shipping_order.get("shipping_date")
+        shipping_order_quantity = shipping_order.get("shipping_quantity")
+
+        print(shipping_order_no,shipping_order_date,shipping_order_quantity)
+
         Order.objects.filter(order_no=shipping_order_no).update(shipping_order=True)
-        Order.objects.filter(order_no=shipping_order_no).update(shipping_data="フロントから来た日付")#日付を入力できるようにする
-        Order.objects.filter(order_no=shipping_order_no).update(shipping_quantity="フロントから来た数量")#数量をh入力できるように編集する
+        Order.objects.filter(order_no=shipping_order_no).update(shipping_date=shipping_order_date)
+        Order.objects.filter(order_no=shipping_order_no).update(shipping_quantity=shipping_order_quantity)
+
         return JsonResponse({"status":"success","data":shipping_order_no})
         
     def delete_order(self,request):
@@ -119,6 +126,7 @@ class Order_input(View):
 
         #削除対象が存在しない場合。　ただ削除対象をクリックしてここに辿り着くので削除対象がないのは何かしらの問題が起きている
         return JsonResponse({"status":"error"})
+
 
 
 class Shipping_list(View):

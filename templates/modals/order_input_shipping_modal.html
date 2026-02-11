@@ -1,5 +1,5 @@
 <div class="modal fade" id="order_input_shipping_modal">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">出荷</h5>
@@ -15,6 +15,18 @@
             <span class="fs-3 text-info" id="shipping_order_no"> </span>
             を出荷しますか？
           </p>
+        </div>
+        <div id="shipping_content" class="m-2">
+          <div class="row">
+            <div class="col-md-6">
+              <label>出荷数</label>
+              <input class="form-control" data-id="shipping_quantity" />
+            </div>
+            <div class="col-md-6">
+              <label>納入日</label>
+              <input class="form-control" type="date" data-id="shipping_date" />
+            </div>
+          </div>
         </div>
       </div>
       <div class="modal-footer justify-content-between">

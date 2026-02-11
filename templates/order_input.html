@@ -168,11 +168,20 @@
 
     //出荷モーダルで出荷ボタンをクリック
     $("#shipping_order_btn").on("click", function () {
+      const shipping_data_list = {};
+      $("#shipping_content")
+        .find("input")
+        .each(function () {
+          shipping_data_list[$(this).data("id")] = $(this).val();
+        });
+
+      shipping_data_list["order_no"] = order_no;
+
       $.ajax({
         url: url,
         type: "POST",
         data: {
-          data: order_no,
+          data: JSON.stringify(shipping_data_list),
           kubun: "shipping_order",
         },
         headers: { "X-CSRFToken": "{{ csrf_token }}" },
