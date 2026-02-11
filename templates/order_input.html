@@ -149,9 +149,29 @@
         const data = table.row(options.$trigger).data();
         const item_no = data.item_no;
         order_no = data.order_no;
+        const order_content = {};
+        order_content["order_no"] = data.order_no;
+        order_content["item_no"] = data.item_no;
+        order_content["item_name"] = data.item_name;
+        order_content["order_price"] = data.order_price;
+        order_content["provisional_order"] = data.provisional_order;
 
         //編集選択時の処理
         if (key === "edit") {
+          $("#order_edit_modal_content")
+            .find("input")
+            .each(function () {
+              let form = $(this).data("id");
+              switch ($(this).attr("type")) {
+                case "checkbox":
+                  $(this).prop("checked", order_content[form]);
+                  break;
+                default:
+                  $(this).val(order_content[form]);
+              }
+            });
+
+          $("#edit_order_item_no_modal").prop("disabled", true);
           $("#order_edit_modal").modal("show");
           //出荷選択時の処理
         } else if (key === "shipping") {
@@ -165,6 +185,23 @@
     });
 
     //--------------｟編集モーダル内の処理｠--------------------
+    //編集ボタンを押した時の処理
+    $("#order_edit_btn").on("click", function () {
+      const order_edit_content = {};
+      $("#order_edit_modal_content")
+        .find("input")
+        .each(function () {
+          switch ($(this).attr("type")) {
+            case "checkbox":
+              order_edit_content[$(this).data("id")] = $(this).prop("checked");
+              break;
+            default:
+              order_edit_content[$(this).data("id")] = $(this).val();
+          }
+        });
+    });
+
+    //閉じるボタンを押した時の処理
     $(".close_order_edit_modal_btn").on("click", function () {
       $("#order_edit_modal").modal("hide");
     });

@@ -8,16 +8,20 @@
           class="btn-close close_order_edit_modal_btn"
         ></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id="order_edit_modal_content">
         <div class="row">
           <div class="col-md-6">
             <div class="m-2">
-              <label>品番</label>
-              <input class="form-control" />
+              <label>品番 </label>
+              <input
+                class="form-control"
+                data-id="item_no"
+                id="edit_order_item_no_modal"
+              />
             </div>
             <div class="m-2">
               <label>品名</label>
-              <input class="form-control" />
+              <input class="form-control" data-id="item_name" />
             </div>
             <div class="m-3">
               <div class="h-50 d-flex align-items-center">
@@ -26,6 +30,7 @@
                     class="form-check-input"
                     type="checkbox"
                     id="edit_provisional_order"
+                    data-id="provisional_order"
                   />
                   <label class="form-check-label" for="edit_provisional_order">
                     仮受注</label
@@ -37,11 +42,11 @@
           <div class="col-md-6">
             <div class="m-2">
               <label>単価</label>
-              <input class="form-control" />
+              <input class="form-control" data-id="order_price" />
             </div>
             <div class="m-2">
               <label>注番</label>
-              <input class="form-control" />
+              <input class="form-control" data-id="order_no" />
             </div>
           </div>
         </div>
@@ -53,7 +58,9 @@
         >
           閉じる
         </button>
-        <button type="button" class="btn btn-primary mx-3">編集</button>
+        <button type="button" class="btn btn-primary mx-3" id="order_edit_btn">
+          編集
+        </button>
       </div>
     </div>
   </div>
