@@ -32,8 +32,6 @@ class Item_register(View):
         if Item.objects.filter(item_no=items.item_no).exists():
             return JsonResponse({'status': 'error_duplicate', 'message': items.item_no})
         
-
-        
         items.save()
 
         return JsonResponse({'status': 'success', 'message': items.item_no})
@@ -100,13 +98,16 @@ class Order_input(View):
         return JsonResponse({"data": orders})
 
     def shipping_order(self,request):
-        shipping_order = json.loads(request.POST.get("data"))
+        order_content = json.loads(request.POST.get("data"))
 
-        shipping_order_no = shipping_order.get("order_no")
-        shipping_order_date = shipping_order.get("shipping_date")
-        shipping_order_quantity = shipping_order.get("shipping_quantity")
+        shipping_order_no = order_content.get("order_no")
+        shipping_order_date = order_content.get("shipping_date")
+        shipping_order_quantity = order_content.get("shipping_quantity")
 
-        print(shipping_order_no,shipping_order_date,shipping_order_quantity)
+
+        if order_content.get("provisional_order"):
+            return JsonResponse({"status":"provisional_error"})
+            print("仮受注")
 
         Order.objects.filter(order_no=shipping_order_no).update(shipping_order=True)
         Order.objects.filter(order_no=shipping_order_no).update(shipping_date=shipping_order_date)

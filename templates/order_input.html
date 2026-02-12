@@ -135,6 +135,7 @@
 
     // コンテキストメニューの処理
     let order_no; //order_noはクリックしたテーブルの注文番号が入る。複数の関数で使用したいため外に出している。
+    let order_content = {};
     $.contextMenu({
       selector: ".order_input_table_tr",
       items: {
@@ -149,7 +150,7 @@
         const data = table.row(options.$trigger).data();
         const item_no = data.item_no;
         order_no = data.order_no;
-        const order_content = {};
+
         order_content["order_no"] = data.order_no;
         order_content["item_no"] = data.item_no;
         order_content["item_name"] = data.item_name;
@@ -206,26 +207,25 @@
       $("#order_edit_modal").modal("hide");
     });
 
-    //-----------------------------------------------------
-
     //--------------｟出荷モーダル内の処理｠--------------------
 
     //出荷モーダルで出荷ボタンをクリック
     $("#shipping_order_btn").on("click", function () {
-      const shipping_data_list = {};
+      //const shipping_data_list = {};
       $("#shipping_content")
         .find("input")
         .each(function () {
-          shipping_data_list[$(this).data("id")] = $(this).val();
+          order_content[$(this).data("id")] = $(this).val();
         });
 
-      shipping_data_list["order_no"] = order_no;
+      console.log(order_content);
+      order_content["order_no"] = order_no;
 
       $.ajax({
         url: url,
         type: "POST",
         data: {
-          data: JSON.stringify(shipping_data_list),
+          data: JSON.stringify(order_content),
           kubun: "shipping_order",
         },
         headers: { "X-CSRFToken": "{{ csrf_token }}" },
@@ -234,6 +234,8 @@
           $("#order_input_shipping_modal").modal("hide");
           LobiboxSuccess(response.data + "を出荷しました。");
           table.ajax.reload();
+        } else if (response.status === "provisional_error") {
+          LobiboxError("仮受注のため出荷できません。");
         } else {
           alert("予期せぬエラーです"); //エラーの場合はalertでいい
         }
@@ -245,9 +247,8 @@
       $("#order_input_shipping_modal").modal("hide");
     });
 
-    //-----------------------------------------------
-
     //--------------｟削除モーダル内の処理｠-------------------
+
     //削除ボタンクリック時の処理
     $("#delete-order-btn").on("click", function () {
       $.ajax({
