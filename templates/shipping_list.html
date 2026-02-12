@@ -26,8 +26,8 @@
     </div>
   </div>
 </div>
-
-{% endblock content %} {% block extra_js %}
+<!-- prettier-ignore -->
+{% endblock content %} {% block extra_js %}{% include 'modals/shipping_list_edit_modal.html' %}
 <script>
   $(document).ready(function () {
     const url = "{% url 'shipping_list' %}";
@@ -43,20 +43,41 @@
       columns: [
         {
           data: "shipping_date",
-          className: "text-start item_register_table_tr",
+          className: "text-start shipping_table_tr",
         },
-        { data: "item_no", className: "text-start item_register_table_tr" },
-        { data: "item_name", className: "text-start item_register_table_tr" },
-        { data: "order_no", className: "text-start item_register_table_tr" },
-        { data: "order_price", className: "text-start item_register_table_tr" },
+        { data: "item_no", className: "text-start shipping_table_tr" },
+        { data: "item_name", className: "text-start shipping_table_tr" },
+        { data: "order_no", className: "text-start shipping_table_tr" },
+        { data: "order_price", className: "text-start shipping_table_tr" },
         {
           data: "shipping_quantity",
-          className: "text-start item_register_table_tr"
+          className: "text-start shipping_table_tr",
         },
       ],
       language: {
         url: "https://cdn.datatables.net/plug-ins/1.13.7/i18n/ja.json",
       },
+    });
+    //-----------コンテキストメニュー------------
+    $.contextMenu({
+      selector: ".shipping_table_tr",
+      items: {
+        edit: { name: "編集", icon: "edit" },
+        sep1: "------------",
+        quit: { name: "閉じる", icon: "quit" },
+      },
+
+      callback: function (key, options) {
+        if (key === "edit") {
+          $("#shipping_list_edit_modal").modal("show");
+          console.log("あああ");
+        }
+      },
+    });
+
+    //-----------｟編集モーダル内の処理｠------------
+    $("#shipping_list_edit_modal .close_btn").on("click", function () {
+      $("#shipping_list_edit_modal").modal("hide");
     });
   });
 </script>
