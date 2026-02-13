@@ -27,7 +27,7 @@
   </div>
 </div>
 <!-- prettier-ignore -->
-{% endblock content %} {% block extra_js %}{% include 'modals/shipping_list_edit_modal.html' %}
+{% endblock content %} {% block extra_js %}{% include 'modals/shipping_cancel_modal.html' %}
 <script>
   $(document).ready(function () {
     const url = "{% url 'shipping_list' %}";
@@ -62,21 +62,21 @@
     $.contextMenu({
       selector: ".shipping_table_tr",
       items: {
-        edit: { name: "編集", icon: "edit" },
+        cancel: { name: "取消", icon: "delete" },
         sep1: "------------",
         quit: { name: "閉じる", icon: "quit" },
       },
 
       callback: function (key, options) {
-        if (key === "edit") {
-          $("#shipping_list_edit_modal").modal("show");
+        if (key === "cancel") {
+          $("#shipping_cancel_modal").modal("show");
         }
       },
     });
 
     //-----------｟編集モーダル内の処理｠------------
-    $("#shipping_list_edit_modal .close_btn").on("click", function () {
-      $("#shipping_list_edit_modal").modal("hide");
+    $("#shipping_cancel_modal .close_btn").on("click", function () {
+      $("#shipping_cancel_modal").modal("hide");
     });
   });
 </script>
