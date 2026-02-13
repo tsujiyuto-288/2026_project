@@ -59,6 +59,7 @@
       },
     });
     //-----------コンテキストメニュー------------
+    let shipping_data = {}; //現状は注番情報しか使わないが後々機能が追加される可能性があるため
     $.contextMenu({
       selector: ".shipping_table_tr",
       items: {
@@ -68,13 +69,31 @@
       },
 
       callback: function (key, options) {
+        const data = table.row(options.$trigger).data();
+        shipping_data = { ...data }; //orderの情報全てを持った配列
+
         if (key === "cancel") {
+          console.log(shipping_data);
           $("#shipping_cancel_modal").modal("show");
         }
       },
     });
 
     //-----------｟編集モーダル内の処理｠------------
+    //取消ボタンを押した時の処理
+    $("#shipping_cancel_modal .cancel_btn").on("click", function () {
+      $.ajax({
+        url: url,
+        type: "POST",
+        data: {
+          cancel_data: shipping_data.order_no,
+          kubun: "cancel_shipping",
+        },
+        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+      });
+    });
+
+    //閉じるボタンを押した時の処理
     $("#shipping_cancel_modal .close_btn").on("click", function () {
       $("#shipping_cancel_modal").modal("hide");
     });
