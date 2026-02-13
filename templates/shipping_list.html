@@ -90,6 +90,14 @@
           kubun: "cancel_shipping",
         },
         headers: { "X-CSRFToken": "{{ csrf_token }}" },
+      }).done(function (request) {
+        if (request.status === "success") {
+          LobiboxSuccess("出荷を取り消しました");
+          table.ajax.reload();
+          $("#shipping_cancel_modal").modal("hide");
+        } else {
+          alert("予期せぬエラーが発生しました");
+        }
       });
     });
 

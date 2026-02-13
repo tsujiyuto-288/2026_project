@@ -155,7 +155,7 @@ class Shipping_list(View):
     def cancel_shipping(self,request):
         cancel_order_no = request.POST.get("cancel_data")
         
-        Order.objects.filter(order_no=cancel_order_no).updata(shipping_order=False)
+        Order.objects.filter(order_no=cancel_order_no).update(shipping_order=False)
 
         return JsonResponse({"status":"success"})
 
