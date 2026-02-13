@@ -299,7 +299,6 @@
       }).done(function (response) {
         table.ajax.reload();
         if (response.status === "success") {
-          console.log("てすと");
           LobiboxSuccess("編集に成功しました");
           $("#editModal").modal("hide");
         } else if (response.status === "kuran_error") {

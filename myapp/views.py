@@ -84,7 +84,6 @@ class Order_input(View):
 
     def save_order(self,request):
         fields = json.loads(request.POST.get('fields'))
-        print(fields)
 
         orders = Order(**fields)
 
@@ -109,7 +108,6 @@ class Order_input(View):
 
         if order_content.get("provisional_order"):
             return JsonResponse({"status":"provisional_error"})
-            print("仮受注")
 
         Order.objects.filter(order_no=shipping_order_no).update(shipping_order=True)
         Order.objects.filter(order_no=shipping_order_no).update(shipping_date=shipping_order_date)
