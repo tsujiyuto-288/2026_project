@@ -137,7 +137,6 @@ class Order_input(View):
         return JsonResponse({"status":"success"})
 
 
-
 class Shipping_list(View):
     def get(self,request):
         #shippings = list(Order.objects.filter(shipping_order=True).values())
@@ -146,8 +145,17 @@ class Shipping_list(View):
     def post(self,request):
         if request.POST.get("kubun")== "get_item":
             return self.get_item(request)
+        if request.POST.get("kubun")=="cancel_shipping":
+            return self.cancel_shipping(request)
 
     def get_item(self,request):
         shippings = list(Order.objects.filter(shipping_order=True).values())
         return JsonResponse({'data':shippings})
+
+    def cancel_shipping(self,request):
+        cancel_order_no = request.POST.get("cancel_data")
+        
+        Order.objects.filter(order_no=cancel_order_no).updata(shipping_order=False)
+
+        return JsonResponse({"status":"success"})
 
