@@ -13,7 +13,7 @@ def dashbord_open(request):
 class Item_register(View):
     def get(self, request):
         items = list(Item.objects.all().values())
-        return render(request, 'item_register.html',{"items" : items})
+        return render(request, "item_register.html",{"items" : items})
 
     def post(self, request):
         if request.POST.get("kubun") == "save_item":
@@ -30,28 +30,28 @@ class Item_register(View):
 
         items = Item(**fields)
         if Item.objects.filter(item_no=items.item_no).exists():
-            return JsonResponse({'status': 'error_duplicate', 'message': items.item_no})
+            return JsonResponse({"status": "error_duplicate", "message": items.item_no})
         
         items.save()
 
-        return JsonResponse({'status': 'success', 'message': items.item_no})
+        return JsonResponse({"status": "success", "message": items.item_no})
 
     def delete_item(self, request):
         import json
         fields = json.loads(request.POST.get('fields'))
 
-        item_no = fields['item_no']
+        item_no = fields["item_no"]
 
         if not Item.objects.filter(item_no=item_no).exists():
-            return JsonResponse({'status':'error_nai', 'message': item_no})
+            return JsonResponse({"status":"error_nai", "message": item_no})
         
         Item.objects.filter(item_no=item_no).delete()
         
-        return JsonResponse({'status': 'success', 'message': item_no})
+        return JsonResponse({"status": "success", "message": item_no})
         
     def get_item(self, request):
         items = list(Item.objects.all().values())
-        return JsonResponse({'data': items})
+        return JsonResponse({"data": items})
 
     def edit_item(self, request):
         fields = json.loads(request.POST.get("fields"))
@@ -68,7 +68,7 @@ class Item_register(View):
 class Order_input(View):
     def get(self, request):
         items = list(Item.objects.all().values())
-        return render(request, 'order_input.html',{"items": items})
+        return render(request, "order_input.html",{"items": items})
 
     def post(self, request):
         if request.POST.get("kubun") == "get_item":
@@ -83,16 +83,16 @@ class Order_input(View):
             return self.edit_order(request)
 
     def save_order(self,request):
-        fields = json.loads(request.POST.get('fields'))
+        fields = json.loads(request.POST.get("fields"))
 
         orders = Order(**fields)
 
         if Order.objects.filter(order_no=orders.order_no).exists():
-            return JsonResponse({'status': 'error_duplicate', 'message': orders.order_no})
+            return JsonResponse({"status": "error_duplicate", "message": orders.order_no})
         
         orders.save()
 
-        return JsonResponse({'status': 'success', 'message': orders.order_no})
+        return JsonResponse({"status": "success", "message": orders.order_no})
 
     def get_item(self,request):
         orders = list(Order.objects.filter(shipping_order=False).values())
@@ -139,7 +139,6 @@ class Order_input(View):
 
 class Shipping_list(View):
     def get(self,request):
-        #shippings = list(Order.objects.filter(shipping_order=True).values())
         return render(request, 'shipping_list.html')
     
     def post(self,request):
@@ -150,7 +149,7 @@ class Shipping_list(View):
 
     def get_item(self,request):
         shippings = list(Order.objects.filter(shipping_order=True).values())
-        return JsonResponse({'data':shippings})
+        return JsonResponse({"data":shippings})
 
     def cancel_shipping(self,request):
         cancel_order_no = request.POST.get("cancel_data")
@@ -159,3 +158,7 @@ class Shipping_list(View):
 
         return JsonResponse({"status":"success"})
 
+
+class Process_list(View):
+    def get (self,request):
+        return render(request,"process_list.html")

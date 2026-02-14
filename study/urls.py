@@ -19,10 +19,11 @@ from django.urls import path
 from myapp import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('',views.dashbord_open, name='dashbord'),
-    path('order_input/',views.Order_input.as_view(), name='order_input'),
-    path('item_register', views.Item_register.as_view(), name='item_register'),
-    path('shipping_list/',views.Shipping_list.as_view(), name='shipping_list'),
+    path("admin/", admin.site.urls),
+    path("",views.dashbord_open, name="dashbord"),
+    path("order_input/",views.Order_input.as_view(), name="order_input"),
+    path("item_register", views.Item_register.as_view(), name="item_register"),
+    path("shipping_list/",views.Shipping_list.as_view(), name="shipping_list"),
+    path("process_list/",views.Process_list.as_view(),name="process_list"),
 
 ]
