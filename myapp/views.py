@@ -1,7 +1,7 @@
 from django.http import JsonResponse, HttpResponse
 import json
 from django.shortcuts import render
-from .models import Item, Order
+from .models import Item, Order, Process
 from django.views import View
 import json
 
@@ -162,3 +162,14 @@ class Shipping_list(View):
 class Process_list(View):
     def get (self,request):
         return render(request,"process_list.html")
+
+    def post(self,request):
+        if request.POST.get("kubun") == "get_item":
+            return self.get_item(request)
+    
+
+    def get_item(self,request):
+        process_list = list(Process.objects.order_by("process_number").values())
+        return JsonResponse({"data":process_list})
+
+            

@@ -17,3 +17,8 @@ class Order(models.Model):
     shipping_order = models.BooleanField(default=False)
     shipping_date = models.CharField(max_length=50)
     shipping_quantity = models.CharField(max_length=50)
+
+
+class Process(models.Model):
+    process_name = models.CharField(max_length=50)
+    process_number = models.IntegerField()
