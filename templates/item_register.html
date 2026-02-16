@@ -96,7 +96,7 @@
         data: {
           kubun: "get_item",
         },
-        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+        headers: CSRF_HEADER,
       },
       columns: [
         { data: "item_no", className: "text-start item_register_table_tr" },
@@ -196,7 +196,7 @@
           fields: JSON.stringify(fields),
           kubun: "save_item",
         },
-        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+        headers: CSRF_HEADER,
       }).done(function (response) {
         // 成功失敗関係なく、テーブル情報を最新にする
         table.ajax.reload();
@@ -234,7 +234,7 @@
           fields: JSON.stringify(fields),
           kubun: "delete_item",
         },
-        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+        headers: CSRF_HEADER,
       }).done(function (response) {
         // 成功失敗関係なく、テーブル情報を最新にする
         table.ajax.reload();
@@ -295,7 +295,7 @@
           fields: JSON.stringify(fields),
           kubun: "edit_item",
         },
-        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+        headers: CSRF_HEADER,
       }).done(function (response) {
         table.ajax.reload();
         if (response.status === "success") {
@@ -319,7 +319,7 @@
           fields: JSON.stringify(delete_item_no),
           kubun: "delete_item",
         },
-        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+        headers: CSRF_HEADER,
       }).done(function (response) {
         table.ajax.reload();
         $("#item-deleteModal").fadeOut();

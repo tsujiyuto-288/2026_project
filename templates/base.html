@@ -211,6 +211,8 @@
     <script>
       const DataTable_language =
         "https://cdn.datatables.net/plug-ins/1.13.7/i18n/ja.json";
+
+      const CSRF_HEADER = { "X-CSRFToken": "{{ csrf_token }}" };
     </script>
 
     {% block extra_js %}{% endblock extra_js %}

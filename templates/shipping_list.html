@@ -38,7 +38,7 @@
         data: {
           kubun: "get_item",
         },
-        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+        headers: CSRF_HEADER,
       },
       columns: [
         {
@@ -89,7 +89,7 @@
           cancel_data: shipping_data.order_no,
           kubun: "cancel_shipping",
         },
-        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+        headers: CSRF_HEADER,
       }).done(function (request) {
         if (request.status === "success") {
           LobiboxSuccess("出荷を取り消しました");

@@ -7,7 +7,7 @@
   <div class="card">
     <div class="card-header py-3 d-flex justify-content-between">
       <h2 class="m-0 h4">工程一覧</h2>
-      <button class="btn btn-primary">
+      <button class="btn btn-primary" id="process_register_btn">
         <i class="bi-plus-circle"></i> 登録
       </button>
     </div>
@@ -27,6 +27,34 @@
   </div>
 </div>
 
+<!--工程登録モーダル-->
+<div class="modal fade" id="process_register_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="h5 modal-title">工程 新規登録</h1>
+        <button type="button" class="btn-close close_modal_btn"></button>
+      </div>
+      <div class="modal-body modal_content">
+        <div class="mb-3">
+          <label>工程番号</label>
+          <input class="form-control" type="number" data-id="process_number" />
+        </div>
+        <div class="mb-3">
+          <label>工程名</label>
+          <input class="form-control" type="text" data-id="process_name" />
+        </div>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-secondary close_modal_btn">
+          閉じる
+        </button>
+        <button type="button" class="btn btn-primary register_btn">登録</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock content %} {% block extra_js %}
 <script>
   $(document).ready(function () {
@@ -38,7 +66,7 @@
         data: {
           kubun: "get_item",
         },
-        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+        headers: CSRF_HEADER,
       },
       columns: [
         { data: "process_number", className: "text-start" },
@@ -47,6 +75,40 @@
       language: {
         url: DataTable_language,
       },
+    });
+
+    //----------工程新規登録の処理----------------
+    //モーダルを開くボタンを押した時の処理
+    $("#process_register_btn").on("click", function () {
+      $("#process_register_modal").modal("show");
+    });
+
+    //モーダルを閉じるボタンを押した時の処理
+    $("#process_register_modal .close_modal_btn").on("click", function () {
+      $("#process_register_modal").modal("hide");
+    });
+
+    //工程登録ボタンを押した時の処理
+    $("#process_register_modal .register_btn").on("click", function () {
+      const register_process = {};
+      $("#process_register_modal .modal_content")
+        .find("input")
+        .each(function () {
+          //後からcaseを追加できるようにswitch文で書いている
+          switch ($(this).attr("type")) {
+            default:
+              register_process[$(this).data("id")] = $(this).val();
+          }
+        });
+      $.ajax({
+        url: url,
+        type: "POST",
+        data: {
+          save_process: JSON.stringify(register_process),
+          kubun: "save_process",
+        },
+        headers: CSRF_HEADER,
+      });
     });
   });
 </script>

@@ -108,7 +108,7 @@
         data: {
           kubun: "get_item",
         },
-        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+        headers: CSRF_HEADER,
       },
       columns: [
         { data: "order_no", className: "text-start order_input_table_tr" },
@@ -208,7 +208,7 @@
           data: JSON.stringify(order_edit_content),
           kubun: "edit_order",
         },
-        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+        headers: CSRF_HEADER,
       }).done(function (request) {
         if (request.status === "success") {
           LobiboxSuccess("編集が完了しました");
@@ -245,7 +245,7 @@
           data: JSON.stringify(order_content),
           kubun: "shipping_order",
         },
-        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+        headers: CSRF_HEADER,
       }).done(function (response) {
         if (response.status === "success") {
           $("#order_input_shipping_modal").modal("hide");
@@ -275,7 +275,7 @@
           data: order_no,
           kubun: "delete_order",
         },
-        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+        headers: CSRF_HEADER,
       }).done(function (response) {
         if (response.status === "success") {
           table.ajax.reload();
@@ -336,7 +336,7 @@
           fields: JSON.stringify(fields),
           kubun: "save_order",
         },
-        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+        headers: CSRF_HEADER,
       }).done(function (response) {
         if (response.status == "success") {
           table.ajax.reload();
