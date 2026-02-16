@@ -166,10 +166,20 @@ class Process_list(View):
     def post(self,request):
         if request.POST.get("kubun") == "get_item":
             return self.get_item(request)
+        if request.POST.get("kubun") =="save_process":
+            return self.save_process(request)
     
 
     def get_item(self,request):
         process_list = list(Process.objects.order_by("process_number").values())
         return JsonResponse({"data":process_list})
 
-            
+    def save_process(self,request):
+        process = json.loads(request.POST.get("save_process"))
+        
+        if Process.objects.filter(process_number=process.get("process_number")):
+            return JsonResponse({"status":"error_tyouhuku"})
+        
+        Process.objects.create(**process)
+        
+        return JsonResponse({"status":"success"})

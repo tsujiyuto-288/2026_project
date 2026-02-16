@@ -108,6 +108,16 @@
           kubun: "save_process",
         },
         headers: CSRF_HEADER,
+      }).done(function (request) {
+        table.ajax.reload();
+        $("#process_register_modal").modal("hide");
+        if (request.status === "error_tyouhuku") {
+          LobiboxError("工程Noが重複しています");
+        } else if (request.status === "success") {
+          LobiboxSuccess("登録に成功しました");
+        } else {
+          alert("想定外のエラーが発生しました。");
+        }
       });
     });
   });
