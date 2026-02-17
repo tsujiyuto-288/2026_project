@@ -55,6 +55,36 @@
   </div>
 </div>
 
+<!--工程編集モーダル-->
+<div class="modal fade" id="process_edit_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="h5 modal-title">工程 編集</h1>
+        <button type="button" class="btn-close close_modal_btn"></button>
+      </div>
+      <div class="modal-body modal_content">
+        <div class="mb-3">
+          <label>工程番号</label>
+          <input class="form-control" type="number" data-id="process_number" />
+          <div class="invalid-feedback">工程番号を入力してください</div>
+        </div>
+        <div class="mb-3">
+          <label>工程名</label>
+          <input class="form-control" type="text" data-id="process_name" />
+          <div class="invalid-feedback">工程名を入力してください</div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-secondary close_modal_btn">
+          閉じる
+        </button>
+        <button type="button" class="btn btn-primary edit_btn">変更</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock content %} {% block extra_js %}
 <script>
   $(document).ready(function () {
@@ -69,12 +99,90 @@
         headers: CSRF_HEADER,
       },
       columns: [
-        { data: "process_number", className: "text-start" },
-        { data: "process_name", className: "text-start" },
+        { data: "process_number", className: "text-start process_table_tr" },
+        { data: "process_name", className: "text-start process_table_tr" },
       ],
       language: {
         url: DataTable_language,
       },
+    });
+
+    //-----------コンテキストメニュー------------
+    let data = {}; //編集元の工程のデータ
+    $.contextMenu({
+      selector: ".process_table_tr",
+      items: {
+        edit: { name: "編集", icon: "edit" },
+        delete: { name: "削除", icon: "delete" },
+        sep1: "------------",
+        quit: { name: "閉じる", icon: "quit" },
+      },
+      callback: function (key, options) {
+        data = table.row(options.$trigger).data();
+        if (key === "edit") {
+          $("#process_edit_modal .modal_content")
+            .find("input")
+            .each(function () {
+              switch ($(this).attr("type")) {
+                default:
+                  const key = $(this).data("id");
+                  $(this).val(data[key]);
+              }
+            });
+          $("#process_edit_modal").modal("show");
+          // 編集ボタンが押された時の処理
+          console.log("編集", data);
+        } else if (key === "delete") {
+          // 削除ボタンが押された時の処理
+          console.log("削除", data);
+        }
+      },
+    });
+
+    //---------工程編集モーダル-----------------
+    //編集ボタンを押した時の処理
+    $("#process_edit_modal .edit_btn").on("click", function () {
+      const edit_process = {};
+      edit_process["id"] = data["id"];
+
+      $("#process_edit_modal .modal_content")
+        .find("input")
+        .each(function () {
+          switch ($(this).attr("type")) {
+            default:
+              const inputVal = $(this).val();
+              edit_process[$(this).data("id")] = inputVal;
+              //入力がなかったとき、フロント側でバリデーションチェックする
+              if (inputVal === "") {
+                $(this).addClass("is-invalid");
+              } else {
+                $(this).removeClass("is-invalid");
+              }
+          }
+        });
+      console.log(edit_process);
+      $.ajax({
+        url: url,
+        type: "POST",
+        data: {
+          edit_process: JSON.stringify(edit_process),
+          kubun: "edit_process",
+        },
+        headers: CSRF_HEADER,
+      }).done(function (request) {
+        if (request.status === "error_tyouhuku") {
+          LobiboxError("工程番号が重複しています");
+        } else if (request.status === "success") {
+          LobiboxSuccess("工程の編集に成功しました");
+        } else {
+          alert("予想外のエラーが発生しました");
+        }
+      });
+    });
+
+    //閉じるボタンを押した時の処理
+    $("#process_edit_modal .close_modal_btn").on("click", function () {
+      $("#process_edit_modal").modal("hide");
     });
 
     //----------工程新規登録の処理----------------

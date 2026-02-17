@@ -168,7 +168,8 @@ class Process_list(View):
             return self.get_item(request)
         if request.POST.get("kubun") =="save_process":
             return self.save_process(request)
-    
+        if request.POST.get("kubun") == "edit_process":
+            return self.edit_process(request)
 
     def get_item(self,request):
         process_list = list(Process.objects.order_by("process_number").values())
@@ -183,3 +184,15 @@ class Process_list(View):
         Process.objects.create(**process)
         
         return JsonResponse({"status":"success"})
+    
+    def edit_process(self,request):
+        edit_process = json.loads(request.POST.get("edit_process"))
+        
+        # 変更後の工程番号が重複する場合、編集不可
+        if Process.objects.filter(process_number=edit_process.get("process_number")):
+            return JsonResponse({"status":"error_tyouhuku"})
+        
+        Process.objects.filter(id=edit_process.get("id")).update(**edit_process)
+
+        return JsonResponse({"status":"success"})
+        
