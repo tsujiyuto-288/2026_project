@@ -85,6 +85,27 @@
   </div>
 </div>
 
+<!--工程削除モーダル-->
+<div class="modal fade" id="process_delete_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="h5 modal-title">工程 削除</h1>
+        <button type="button" class="btn-close close_modal_btn"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="fs-3 m-2">出荷を取り消しますか？</p>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-secondary close_modal_btn">
+          閉じる
+        </button>
+        <button type="button" class="btn btn-primary delete_btn">変更</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock content %} {% block extra_js %}
 <script>
   $(document).ready(function () {
@@ -131,10 +152,10 @@
             });
           $("#process_edit_modal").modal("show");
           // 編集ボタンが押された時の処理
-          console.log("編集", data);
         } else if (key === "delete") {
           // 削除ボタンが押された時の処理
           console.log("削除", data);
+          $("#process_delete_modal").modal("show");
         }
       },
     });
@@ -182,6 +203,35 @@
     //閉じるボタンを押した時の処理
     $("#process_edit_modal .close_modal_btn").on("click", function () {
       $("#process_edit_modal").modal("hide");
+    });
+
+    //---------工程削除モーダル-----------------
+    //削除ボタンを押した時の処理
+    $("#process_edit_modal .edit_btn").on("click", function () {
+      const delete_process = {};
+      delete_process["id"] = data["id"];
+        $.ajax({
+          url: url,
+          type: "POST",
+          data: {
+            edit_process: JSON.stringify(edit_process),
+            kubun: "delete_process",
+          },
+          headers: CSRF_HEADER,
+        }).done(function (request) {
+          if (request.status === "error") {
+            LobiboxError("");
+          } else if (request.status === "success") {
+            LobiboxSuccess("");
+          } else {
+            alert("予想外のエラーが発生しました");
+          }
+      });
+
+
+    //閉じるボタンを押した時の処理
+    $("#process_delete_modal .close_modal_btn").on("click", function () {
+      $("#process_delete_modal").modal("hide");
     });
 
     //----------工程新規登録の処理----------------
