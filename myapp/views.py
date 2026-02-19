@@ -170,6 +170,8 @@ class Process_list(View):
             return self.save_process(request)
         if request.POST.get("kubun") == "edit_process":
             return self.edit_process(request)
+        if request.POST.get("kubun") == "delete_process":
+            return self.delete_process(request)
 
     def get_item(self,request):
         process_list = list(Process.objects.order_by("process_number").values())
@@ -195,4 +197,15 @@ class Process_list(View):
         Process.objects.filter(id=edit_process.get("id")).update(**edit_process)
 
         return JsonResponse({"status":"success"})
+
+    def delete_process(self,request):
+        delete_process = json.loads(request.POST.get("delete_process"))
+
+
+        # 変更先の工程のpkが見つからない時
+        if not Process.objects.filter(id=delete_process.get("id")).exists():
+            return JsonResponse({"status":"error"})
         
+        Process.objects.filter(id=delete_process.get("id")).delete()
+
+        return JsonResponse({"status":"success"})

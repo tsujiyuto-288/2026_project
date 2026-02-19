@@ -94,7 +94,7 @@
         <button type="button" class="btn-close close_modal_btn"></button>
       </div>
       <div class="modal-body text-center">
-        <p class="fs-3 m-2">出荷を取り消しますか？</p>
+        <p class="fs-3 m-2">工程を削除しますか？</p>
       </div>
       <div class="modal-footer justify-content-between">
         <button type="button" class="btn btn-secondary close_modal_btn">
@@ -190,6 +190,8 @@
         },
         headers: CSRF_HEADER,
       }).done(function (request) {
+        table.ajax.reload();
+        $("#process_edit_modal").modal("hide");
         if (request.status === "error_tyouhuku") {
           LobiboxError("工程番号が重複しています");
         } else if (request.status === "success") {
@@ -207,27 +209,29 @@
 
     //---------工程削除モーダル-----------------
     //削除ボタンを押した時の処理
-    $("#process_edit_modal .edit_btn").on("click", function () {
+    $("#process_delete_modal .delete_btn").on("click", function () {
       const delete_process = {};
       delete_process["id"] = data["id"];
-        $.ajax({
-          url: url,
-          type: "POST",
-          data: {
-            delete_process: JSON.stringify(delete_process),
-            kubun: "delete_process",
-          },
-          headers: CSRF_HEADER,
-        }).done(function (request) {
-          if (request.status === "error") {
-            LobiboxError("");
-          } else if (request.status === "success") {
-            LobiboxSuccess("");
-          } else {
-            alert("予想外のエラーが発生しました");
-          }
+      $.ajax({
+        url: url,
+        type: "POST",
+        data: {
+          delete_process: JSON.stringify(delete_process),
+          kubun: "delete_process",
+        },
+        headers: CSRF_HEADER,
+      }).done(function (request) {
+        table.ajax.reload();
+        $("#process_delete_modal").modal("hide");
+        if (request.status === "error") {
+          LobiboxError("削除対象の工程が見つかりません。");
+        } else if (request.status === "success") {
+          LobiboxSuccess("工程の削除に成功しました");
+        } else {
+          alert("予想外のエラーが発生しました");
+        }
       });
-
+    });
 
     //閉じるボタンを押した時の処理
     $("#process_delete_modal .close_modal_btn").on("click", function () {
