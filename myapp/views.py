@@ -102,16 +102,18 @@ class Order_input(View):
         order_content = json.loads(request.POST.get("data"))
 
         shipping_order_no = order_content.get("order_no")
-        shipping_order_date = order_content.get("shipping_date")
-        shipping_order_quantity = order_content.get("shipping_quantity")
 
-
+        #仮受注の場合はエラー
         if order_content.get("provisional_order"):
             return JsonResponse({"status":"provisional_error"})
 
+        #もし出荷済みを表す情報が送られているデータの中に含まれていたら、これ以降の処理が正しく走らないため
+        if not order_content.get("shipping_order") == None:
+            return JsonResponse({"status":"souteigai_error"})
+
+
         Order.objects.filter(order_no=shipping_order_no).update(shipping_order=True)
-        Order.objects.filter(order_no=shipping_order_no).update(shipping_date=shipping_order_date)
-        Order.objects.filter(order_no=shipping_order_no).update(shipping_quantity=shipping_order_quantity)
+        Order.objects.filter(order_no=shipping_order_no).update(**order_content)
 
         return JsonResponse({"status":"success","data":shipping_order_no})
     
