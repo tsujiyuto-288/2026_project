@@ -163,6 +163,7 @@
     //---------工程編集モーダル-----------------
     //編集ボタンを押した時の処理
     $("#process_edit_modal .edit_btn").on("click", function () {
+      let error = false;//入力フォームに空欄項目があるかどうか入れる。
       const edit_process = {};
       edit_process["id"] = data["id"];
 
@@ -176,11 +177,16 @@
               //入力がなかったとき、フロント側でバリデーションチェックする
               if (inputVal === "") {
                 $(this).addClass("is-invalid");
+                error = true;//入力がなかった場合、errorの値をtrueにする
               } else {
                 $(this).removeClass("is-invalid");
               }
           }
         });
+      //入力項目に空欄があった場合は処理を中断。
+      if (error === true) {
+        return;
+      }
       $.ajax({
         url: url,
         type: "POST",
