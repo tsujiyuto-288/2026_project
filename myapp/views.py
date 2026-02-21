@@ -192,8 +192,8 @@ class Process_list(View):
     def edit_process(self,request):
         edit_process = json.loads(request.POST.get("edit_process"))
         
-        # 変更後の工程番号が重複する場合、編集不可
-        if Process.objects.filter(process_number=edit_process.get("process_number")):
+        # 変更後の工程番号が重複する場合、編集不可(自分自身を除く)
+        if Process.objects.filter(process_number=edit_process.get("process_number")).exclude(id=edit_process.get("id")):
             return JsonResponse({"status":"error_tyouhuku"})
         
         Process.objects.filter(id=edit_process.get("id")).update(**edit_process)
