@@ -162,7 +162,7 @@ class Shipping_list(View):
 
 
 class Process_list(View):
-    def get (self,request):
+    def get(self,request):
         return render(request,"process_list.html")
 
     def post(self,request):
