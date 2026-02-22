@@ -211,3 +211,8 @@ class Process_list(View):
         Process.objects.filter(id=delete_process.get("id")).delete()
 
         return JsonResponse({"status":"success"})
+        
+
+class progress_input(View):
+    def get(self,request):
+        return render(request,"progress_input.html")
