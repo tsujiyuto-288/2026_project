@@ -79,7 +79,7 @@
       }
 
       .sidebar .nav-link-active {
-        background-color: rgb(49, 97, 255);
+        background-color: rgb(62, 107, 253);
         color: #ebebeb;
         margin: 5px 20px;
       }
@@ -118,22 +118,20 @@
             data-bs-toggle="collapse"
             href="#basicInfoCollapse"
           >
-            <span><i class="bi bi-folder-fill me-2"></i>基本情報</span>
+            <span><i class="bi bi-info-square-fill me-2"></i>基本情報</span>
             <i class="bi bi-chevron-down mx-2"></i>
           </a>
           <div class="collapse" id="basicInfoCollapse">
             <ul class="list-unstyled ms-3">
               <li class="nav-item">
                 <a href="{% url 'item_register' %}" class="nav-link">
-                  <span
-                    ><i class="bi bi-motherboard-fill me-2"></i>品番登録</span
-                  >
+                  <span><i class="bi bi-circle me-2"></i>品番登録</span>
                 </a>
               </li>
 
               <li class="nav-item">
                 <a href="{% url 'process_list' %}" class="nav-link">
-                  <span><i class="bi-diagram-3 me-2"></i>工程登録</span>
+                  <span><i class="bi bi-circle me-2"></i>工程登録</span>
                 </a>
               </li>
             </ul>
@@ -143,14 +141,14 @@
             data-bs-toggle="collapse"
             href="#basicInfoCollapse-2"
           >
-            <span><i class="bi bi-folder-fill me-2"></i>操作</span>
+            <span><i class="bi bi-tools me-2"></i>操作</span>
             <i class="bi bi-chevron-down mx-2"></i>
           </a>
           <div class="collapse" id="basicInfoCollapse-2">
             <ul class="list-unstyled ms-3">
               <li class="nav-item">
                 <a href="{% url 'order_input' %}" class="nav-link">
-                  <span><i class="bi bi-list-ul me-2"></i>受注入力</span>
+                  <span><i class="bi bi-circle me-2"></i>受注入力</span>
                 </a>
               </li>
             </ul>
@@ -160,16 +158,14 @@
             data-bs-toggle="collapse"
             href="#basicInfoCollapse-3"
           >
-            <span><i class="bi bi-folder-fill me-2"></i>情報確認</span>
+            <span><i class="bi bi-search me-2"></i>情報確認</span>
             <i class="bi bi-chevron-down mx-2"></i>
           </a>
           <div class="collapse" id="basicInfoCollapse-3">
             <ul class="list-unstyled ms-3">
               <li class="nav-item">
                 <a href="{% url 'shipping_list' %}" class="nav-link">
-                  <span
-                    ><i class="bi bi-cart-check-fill me-2"></i>出荷一覧</span
-                  >
+                  <span><i class="bi bi-circle me-2"></i>出荷一覧</span>
                 </a>
               </li>
             </ul>
@@ -215,6 +211,8 @@
             if ($(this).attr("href") === path) {
               $(this).addClass("nav-link-active");
               $(this).closest(".collapse").addClass("show");
+              $(this).find("i").removeClass("bi-circle");
+              $(this).find("i").addClass("bi-record-circle");
             }
           });
       });
