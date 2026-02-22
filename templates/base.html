@@ -218,8 +218,11 @@
             if ($(this).attr("href") === path) {
               $(this).addClass("nav-link-active");
               $(this).closest(".collapse").addClass("show");
-              $(this).find("i").removeClass("bi-circle");
-              $(this).find("i").addClass("bi-record-circle");
+              //ダッシュボードは親アコーディオンがないのでアイコンを変えたりしない。
+              if (path !== "{% url 'dashbord' %}") {
+                $(this).find("i").removeClass("bi-circle");
+                $(this).find("i").addClass("bi-record-circle");
+              }
             }
           });
       });
