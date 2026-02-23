@@ -31,6 +31,44 @@
             type="text"
           />
         </div>
+        <div class="mb-3">
+          <label>実施工程</label>
+          <div class="d-flex gap-3">
+            <div class="border rounded p-3 w-50 bg-light">
+              <span class="text-secondary fw-bold small d-block mb-3"
+                ><i class="bi bi-list-task me-2"></i>未選択の工程</span
+              >
+              <ul
+                id="process_candidate_list"
+                class="list-group"
+                style="min-height: 150px"
+              ></ul>
+            </div>
+            <div class="border rounded p-3 w-50 bg-light">
+              <span class="text-secondary fw-bold small d-block mb-3"
+                ><i class="bi bi-play-circle-fill me-2"></i>実施する工程</span
+              >
+              <ul
+                id="process_selected_list"
+                class="list-group"
+                style="min-height: 150px"
+              >
+                {% for process in process_list %}
+                <li
+                  class="list-group-item border rounded mb-2 shadow-sm d-flex align-items-center"
+                  data-id="{{ process.id }}"
+                  style="cursor: grab"
+                >
+                  <i class="bi bi-grip-vertical text-secondary me-2"></i>
+                  <!--改行されるとバグるのでprettierによって改行されないように-->
+                  <!-- prettier-ignore -->
+                  {{process.process_name }}
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="col-md-6 d-flex flex-column gap-3">
@@ -88,6 +126,20 @@
 <script>
   $(document).ready(function () {
     let delete_item_no = {};
+
+    // SortableJSの初期化
+    new Sortable(document.getElementById("process_candidate_list"), {
+      group: "shared_processes",
+      animation: 150,
+      ghostClass: "bg-light",
+    });
+
+    new Sortable(document.getElementById("process_selected_list"), {
+      group: "shared_processes",
+      animation: 150,
+      ghostClass: "bg-light",
+    });
+
     const url = "{% url 'item_register' %}";
     const table = new DataTable("#item_table", {
       ajax: {
@@ -182,7 +234,15 @@
           }
         });
 
+      // 選択済みの工程IDを順番に取得して配列化
+      let selected_processes = [];
+      $("#process_selected_list li").each(function () {
+        selected_processes.push($(this).data("id"));
+      });
+      fields["progress_list"] = selected_processes;
+
       for (const check in fields) {
+        if (check === "progress_list") continue; // 配列型のため空文字判定を除外
         if (fields[check] === "") {
           LobiboxError("未記入の項目があります");
           return;

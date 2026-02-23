@@ -13,7 +13,8 @@ def dashbord_open(request):
 class Item_register(View):
     def get(self, request):
         items = list(Item.objects.all().values())
-        return render(request, "item_register.html",{"items" : items})
+        process_list = list(Process.objects.all().values())
+        return render(request, "item_register.html", {"items": items, "process_list": process_list})
 
     def post(self, request):
         if request.POST.get("kubun") == "save_item":
