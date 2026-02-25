@@ -7,6 +7,7 @@ class Item(models.Model):
     item_name = models.CharField(max_length=50)
     item_price = models.IntegerField()
     item_deleted = models.BooleanField(default=False)
+    process_list = models.JSONField(blank=True,null=True)#空欄を許可
 
 class Order(models.Model):
     item_name = models.CharField(max_length=50)

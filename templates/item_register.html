@@ -32,10 +32,8 @@
           />
         </div>
       </div>
-
       <div class="col-md-6 d-flex flex-column gap-3">
         <div class="mb-3">
-          
           <label>単価</label>
           <input
             id="item_price"
@@ -79,13 +77,14 @@
                 >
                 <ul
                   id="process_selected_list"
+                  data-id="process_list"
                   class="list-group"
                   style="min-height: 150px"
                 >
                   {% for process in process_list %}
                   <li
                     class="list-group-item border rounded mb-2 shadow-sm d-flex align-items-center"
-                    data-id="{{ process.id }}"
+                    data-process_id="{{ process.id }}"
                     style="cursor: grab"
                   >
                     <i class="bi bi-grip-vertical text-secondary me-2"></i>
@@ -238,21 +237,15 @@
               fields[$(this).data("id")] = $(this).val();
           }
         });
-
-      // 選択済みの工程IDを順番に取得して配列化
-      let selected_processes = [];
-      $("#process_selected_list li").each(function () {
-        selected_processes.push($(this).data("id"));
-      });
-      fields["progress_list"] = selected_processes;
-
-      for (const check in fields) {
-        if (check === "progress_list") continue; // 配列型のため空文字判定を除外
-        if (fields[check] === "") {
-          LobiboxError("未記入の項目があります");
-          return;
-        }
-      }
+      //実施工程ののリストを作成
+      let process_list = [];
+      $("#process_candidate_list")
+        .find("li")
+        .each(function () {
+          process_list.push($(this).data("process_id"));
+        });
+      //実施工程のカラム名をキー、登録したリストが値にしてオブジェクトに追加
+      fields[$("#process_selected_list").data("id")] = process_list;
 
       $.ajax({
         url: url,
