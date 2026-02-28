@@ -424,20 +424,23 @@
           }
         });
       //実施工程ののリストを作成
-      let process_list = [];
+      let process_turn = [];
       $("#process_candidate_list")
         .find("li")
-        .each(function () {
-          process_list.push($(this).data("process_id"));
+        .each(function (i) {
+          process_turn.push({
+            item_no: fields.item_no,
+            process_id: $(this).data("process_id"),
+            process_turn: i + 1,
+          });
         });
-      //実施工程のカラム名をキー、登録したリストが値にしてオブジェクトに追加
-      fields[$("#process_selected_list").data("id")] = process_list;
 
       $.ajax({
         url: url,
         type: "POST",
         data: {
           fields: JSON.stringify(fields),
+          process_turn: JSON.stringify(process_list),
           kubun: "save_item",
         },
         headers: CSRF_HEADER,
