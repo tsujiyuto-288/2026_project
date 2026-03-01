@@ -6,7 +6,7 @@ class Item(models.Model):
     item_name = models.CharField(max_length=50)
     item_price = models.IntegerField()
     item_deleted = models.BooleanField(default=False)
-    process_list = models.ManyToManyField('Process', through='ItemProcess')
+    item_process = models.ManyToManyField('Process', through='ItemProcess')
 
 # 部品マスターと工程の中間テーブル
 class ItemProcess(models.Model):
