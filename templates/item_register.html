@@ -424,11 +424,11 @@
           }
         });
       //実施工程ののリストを作成
-      let process_turn = [];
+      let process_list = [];
       $("#process_candidate_list")
         .find("li")
         .each(function (i) {
-          process_turn.push({
+          process_list.push({
             item_no: fields.item_no,
             process_id: $(this).data("process_id"),
             process_turn: i + 1,
@@ -440,7 +440,7 @@
         type: "POST",
         data: {
           fields: JSON.stringify(fields),
-          process_turn: JSON.stringify(process_turn),
+          process_list: JSON.stringify(process_list),
           kubun: "save_item",
         },
         headers: CSRF_HEADER,

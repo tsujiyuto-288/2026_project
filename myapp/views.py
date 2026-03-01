@@ -1,7 +1,7 @@
 from django.http import JsonResponse, HttpResponse
 import json
 from django.shortcuts import render
-from .models import Item, Order, Process
+from .models import Item, Order, Process, ItemProcess
 from django.views import View
 import json
 
@@ -26,14 +26,27 @@ class Item_register(View):
         if request.POST.get("kubun") == "edit_item":
             return self.edit_item(request)
 
+
     def save_item(self, request):
-        fields = json.loads(request.POST.get('fields'))
+        fields = json.loads(request.POST.get("fields"))
+        process_list = json.loads(request.POST.get("process_list"))
 
         items = Item(**fields)
         if Item.objects.filter(item_no=items.item_no).exists():
             return JsonResponse({"status": "error_duplicate", "message": items.item_no})
-        
+
         items.save()
+
+        item_process_list = []
+        for process in process_list:
+            item_process = ItemProcess(
+                item_id=process.get("item_no"),
+                process_id=process.get("process_id"),
+                process_turn=process.get("process_turn")
+            )
+            item_process_list.append(item_process)
+
+        ItemProcess.objects.bulk_create(item_process_list)
 
         return JsonResponse({"status": "success", "message": items.item_no})
 
@@ -203,7 +216,6 @@ class Process_list(View):
 
     def delete_process(self,request):
         delete_process = json.loads(request.POST.get("delete_process"))
-
 
         # 変更先の工程のpkが見つからない時
         if not Process.objects.filter(id=delete_process.get("id")).exists():
