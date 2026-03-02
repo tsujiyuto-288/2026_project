@@ -25,7 +25,8 @@ class Item_register(View):
             return self.get_item(request)
         if request.POST.get("kubun") == "edit_item":
             return self.edit_item(request)
-
+        if request.POST.get("kubun") == "get_edit_process_list":
+            return self.get_edit_process_list(request)
 
     def save_item(self, request):
         fields = json.loads(request.POST.get("fields"))
@@ -78,6 +79,9 @@ class Item_register(View):
         
         return JsonResponse({"status":"error"})
 
+    def get_edit_process_list(self, request):
+        process_list = list(Process.objects.all().values())
+        return JsonResponse({"edit_process_list":process_list})
 
 class Order_input(View):
     def get(self, request):
