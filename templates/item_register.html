@@ -253,7 +253,9 @@
                     id="edit_process_selected_list"
                     class="list-group"
                     style="min-height: 150px"
-                  ></ul>
+                  >
+                    <!--動的に生成した工程データが入る。-->
+                  </ul>
                 </div>
                 <div class="border rounded p-3 w-50 bg-light">
                   <span class="text-secondary fw-bold small d-block mb-3"
@@ -370,21 +372,32 @@
             url: url,
             type: "POST",
             data: {
+              item_no: JSON.stringify(data.item_no),
               kubun: "get_edit_process_list",
             },
             headers: CSRF_HEADER,
           }).done(function (response) {
-            // 全ての工程
-            response.edit_process_list.forEach(function (process) {
-              // htmlのデータを動的に生成する。
-              let li_html = `
+            // 選択済工程のセット
+            response.process_list.forEach(function (process) {
+              let selected_process_list = `
               <li class="list-group-item border rounded mb-2 shadow-sm d-flex align-items-center" data-process_id="${process.id}" style="cursor: grab">
                 <i class="bi bi-grip-vertical text-secondary me-2"></i>
                 ${process.process_name}
               </li>
             `;
+              $("#edit_process_selected_list").append(selected_process_list);
+            });
 
-              $("#edit_process_candidate_list").append(li_html);
+            // 未選択の工程のセット
+            response.candidate_process_list.forEach(function (process) {
+              // htmlのデータを動的に生成する。
+              let candidate_process = `
+              <li class="list-group-item border rounded mb-2 shadow-sm d-flex align-items-center" data-process_id="${process.id}" style="cursor: grab">
+                <i class="bi bi-grip-vertical text-secondary me-2"></i>
+                ${process.process_name}
+              </li>
+            `;
+              $("#edit_process_candidate_list").append(candidate_process);
             });
           });
           const item_no = data.item_no;

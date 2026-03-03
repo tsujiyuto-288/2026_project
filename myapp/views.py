@@ -14,7 +14,7 @@ class Item_register(View):
     def get(self, request):
         items = list(Item.objects.all().values())
         process_list = list(Process.objects.all().values())
-        
+
         return render(request, "item_register.html", {"items": items, "process_list": process_list})
 
     def post(self, request):
@@ -81,8 +81,23 @@ class Item_register(View):
         return JsonResponse({"status":"error"})
 
     def get_edit_process_list(self, request):
-        process_list = list(Process.objects.all().values())
-        return JsonResponse({"edit_process_list":process_list})
+        import json
+        
+        select_item_no = json.loads(request.POST.get("item_no"))
+
+        #選択済工程の取得
+        selected_process_list = list(
+            Process.objects.filter(itemprocess__item_id=select_item_no).values()
+        )
+        #未選択工程の取得
+        candidate_process_list = list(
+            Process.objects.exclude(itemprocess__item_id=select_item_no).values()
+        )
+
+        return JsonResponse({
+            "process_list":selected_process_list,
+            "candidate_process_list":candidate_process_list
+        })
 
 class Order_input(View):
     def get(self, request):
