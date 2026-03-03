@@ -14,6 +14,7 @@ class Item_register(View):
     def get(self, request):
         items = list(Item.objects.all().values())
         process_list = list(Process.objects.all().values())
+        
         return render(request, "item_register.html", {"items": items, "process_list": process_list})
 
     def post(self, request):
