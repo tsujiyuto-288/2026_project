@@ -71,14 +71,28 @@ class Item_register(View):
 
     def edit_item(self, request):
         fields = json.loads(request.POST.get("fields"))
+        edit_process_list = json.loads(request.POST.get("edit_process_list"))
 
         if not fields.get("item_no") or not fields.get("item_name") or not fields.get("item_price"):
             return JsonResponse({"status":"kuran_error"})
 
-        if Item.objects.filter(item_no=fields.get("item_no")).update(**fields):
-            return JsonResponse({"status":"success"})
+        Item.objects.filter(item_no=fields.get("item_no")).update(**fields)
+
+        # 実施工程の編集
+        ItemProcess.objects.filter(item_id=fields.get("item_no")).delete()
+
+        edit_item_process_list = []
+        for process in edit_process_list:
+            item_process = ItemProcess(
+                item_id=process.get("item_no"),
+                process_id=process.get("process_id"),
+                process_turn=process.get("process_turn")
+            )
+            edit_item_process_list.append(item_process)
+
+        ItemProcess.objects.bulk_create(edit_item_process_list)
         
-        return JsonResponse({"status":"error"})
+        return JsonResponse({"status":"success"})
 
     def get_edit_process_list(self, request):
         import json

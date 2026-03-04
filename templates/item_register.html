@@ -380,7 +380,10 @@
             // 選択済工程のセット
             response.process_list.forEach(function (process) {
               let selected_process_list = `
-              <li class="list-group-item border rounded mb-2 shadow-sm d-flex align-items-center" data-process_id="${process.id}" style="cursor: grab">
+              <li
+                class="list-group-item border rounded mb-2 shadow-sm d-flex align-items-center"
+                data-process_id="${process.id}"
+                style="cursor: grab">
                 <i class="bi bi-grip-vertical text-secondary me-2"></i>
                 ${process.process_name}
               </li>
@@ -560,11 +563,27 @@
               fields[$(this).data("id")] = $(this).val();
           }
         });
+      //編集後工程データの取得
+      let edit_process_list = [];
+
+      $("#edit_process_selected_list")
+        .find("li")
+        .each(function (i) {
+          edit_process_list.push({
+            item_no: fields.item_no,
+            process_id: $(this).data("process_id"),
+            process_turn: i + 1,
+          });
+        });
+
+      console.log(edit_process_list);
+
       $.ajax({
         url: url,
         type: "POST",
         data: {
           fields: JSON.stringify(fields),
+          edit_process_list: JSON.stringify(edit_process_list),
           kubun: "edit_item",
         },
         headers: CSRF_HEADER,
