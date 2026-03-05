@@ -377,6 +377,9 @@
             },
             headers: CSRF_HEADER,
           }).done(function (response) {
+            // データを一度リセットする
+            $("#edit_process_selected_list").empty();
+            $("#edit_process_candidate_list").empty();
             // 選択済工程のセット
             response.process_list.forEach(function (process) {
               let selected_process_list = `
