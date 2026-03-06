@@ -116,7 +116,8 @@ class Item_register(View):
 class Order_input(View):
     def get(self, request):
         items = list(Item.objects.all().values())
-        return render(request, "order_input.html",{"items": items})
+        process_list = list(Process.objects.all().values())
+        return render(request, "order_input.html",{"items": items,"process_list": process_list})
 
     def post(self, request):
         if request.POST.get("kubun") == "get_item":
@@ -129,6 +130,8 @@ class Order_input(View):
             return self.delete_order(request)
         if request.POST.get("kubun") == "edit_order":
             return self.edit_order(request)
+        if request.POST.get("kubun") == "select_item":
+            return self.select_item(request)
 
     def save_order(self,request):
         fields = json.loads(request.POST.get("fields"))
@@ -185,6 +188,30 @@ class Order_input(View):
         Order.objects.filter(order_no=edit_content.get("order_no")).update(**edit_content)
 
         return JsonResponse({"status":"success"})
+
+    #品番が変更されたときに、アイテムマスターに登録された実施工程をとってくる関数
+    def select_item(self,request):
+        select_item_no = request.POST.get("item_no")
+        print(select_item_no)
+
+        #選択済工程の取得
+        selected_process_list = list(
+            Process.objects.filter(itemprocess__item_id=select_item_no).values()
+        )
+        #未選択工程の取得
+        candidate_process_list = list(
+            Process.objects.exclude(itemprocess__item_id=select_item_no).values()
+        )
+
+        print(selected_process_list)
+        print(candidate_process_list)
+
+        return JsonResponse({
+            "process_list":selected_process_list,
+            "candidate_process_list":candidate_process_list
+        })
+
+
 
 
 class Shipping_list(View):

@@ -79,6 +79,18 @@
                 class="list-group"
                 style="min-height: 150px"
               >
+                {% for process in process_list %}
+                <li
+                  class="list-group-item border rounded mb-2 shadow-sm d-flex align-items-center"
+                  data-process_id="{{ process.id }}"
+                  style="cursor: grab"
+                >
+                  <i class="bi bi-grip-vertical text-secondary me-2"></i>
+                  <!--改行されるとバグるのでprettierによって改行されないように-->
+                  <!-- prettier-ignore -->
+                  {{process.process_name }}
+                </li>
+                {% endfor %}
               </ul>
             </div>
           </div>
@@ -105,7 +117,7 @@
             placeholder="注番"
           />
         </div>
-        <div class="h-50 d-flex align-items-center m-2">
+        <div class="h-50 d-flex mt-4 ms-2">
           <div class="form-check">
             <input
               class="form-check-input"
@@ -305,6 +317,17 @@
   $(document).ready(function () {
     const url = "{% url 'order_input' %}";
     // SortableJSの初期化
+    new Sortable(document.getElementById("process_candidate_list"), {
+      group: "shared_processes",
+      animation: 150,
+      ghostClass: "bg-light",
+    });
+
+    new Sortable(document.getElementById("process_selected_list"), {
+      group: "shared_processes",
+      animation: 150,
+      ghostClass: "bg-light",
+    });
 
     //テーブルの準備
     const table = new DataTable("#order_table", {
@@ -510,6 +533,51 @@
       allowClear: true,
       theme: "bootstrap-5",
       width: "100%",
+    });
+
+    //品番が選択(変更)されたときに走る
+    $("#item_no").on("change", function () {
+      const thisItemNo = $(this).val();
+
+      $.ajax({
+        url: url,
+        type: "POST",
+        data: {
+          item_no: thisItemNo,
+          kubun: "select_item",
+        },
+        headers: CSRF_HEADER,
+      }).done(function (response) {
+        // データを一度リセットする
+        $("#process_selected_list").empty();
+        $("#process_candidate_list").empty();
+
+        // 選択済工程のセット
+        response.process_list.forEach(function (process) {
+          let selected_process_list = `
+              <li
+                class="list-group-item border rounded mb-2 shadow-sm d-flex align-items-center"
+                data-process_id="${process.id}"
+                style="cursor: grab">
+                <i class="bi bi-grip-vertical text-secondary me-2"></i>
+                ${process.process_name}
+              </li>
+            `;
+          $("#process_selected_list").append(selected_process_list);
+        });
+
+        // 未選択の工程のセット
+        response.candidate_process_list.forEach(function (process) {
+          // htmlのデータを動的に生成する。
+          let candidate_process = `
+              <li class="list-group-item border rounded mb-2 shadow-sm d-flex align-items-center" data-process_id="${process.id}" style="cursor: grab">
+                <i class="bi bi-grip-vertical text-secondary me-2"></i>
+                ${process.process_name}
+              </li>
+            `;
+          $("#process_candidate_list").append(candidate_process);
+        });
+      });
     });
 
     //受注ボタンをクリックした時の処理
