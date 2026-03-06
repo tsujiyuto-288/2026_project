@@ -19,11 +19,17 @@ class Order(models.Model):
     item_name = models.CharField(max_length=50)
     item_no = models.CharField(max_length=50)
     order_price =  models.IntegerField()
-    order_no = models.CharField(max_length=50)
+    order_no = models.CharField(max_length=50,primary_key=True)
     provisional_order = models.BooleanField(default=False)
     shipping_order = models.BooleanField(default=False)
     shipping_date = models.CharField(max_length=50)
     shipping_quantity = models.CharField(max_length=50)
+
+# 受注データと工程の中間テーブル
+class OrderProcess(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    process = models.ForeignKey('Process', on_delete=models.CASCADE)
+    process_turn = models.IntegerField()#工程の順番が入る(1とか2とか)
 
 # 工程データ
 class Process(models.Model):
