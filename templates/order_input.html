@@ -56,17 +56,31 @@
             placeholder="品名"
           />
         </div>
-        <div class="h-50 d-flex align-items-center">
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="provisional_order"
-              data-id="provisional_order"
-            />
-            <label class="form-check-label" for="provisional_order">
-              仮受注
-            </label>
+        <div>
+          <label>実施工程</label>
+          <div class="d-flex gap-3">
+            <div class="border rounded p-3 w-50 bg-light">
+              <span class="text-secondary fw-bold small d-block mb-3"
+                ><i class="bi bi-list-task me-2"></i>実施工程</span
+              >
+              <ul
+                id="process_selected_list"
+                class="list-group"
+                style="min-height: 150px"
+              ></ul>
+            </div>
+            <div class="border rounded p-3 w-50 bg-light">
+              <span class="text-secondary fw-bold small d-block mb-3"
+                ><i class="bi bi-play-circle-fill me-2"></i>未選択工程</span
+              >
+              <ul
+                id="process_candidate_list"
+                data-id="process_list"
+                class="list-group"
+                style="min-height: 150px"
+              >
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -90,6 +104,19 @@
             type="text"
             placeholder="注番"
           />
+        </div>
+        <div class="h-50 d-flex align-items-center m-2">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="provisional_order"
+              data-id="provisional_order"
+            />
+            <label class="form-check-label" for="provisional_order">
+              仮受注
+            </label>
+          </div>
         </div>
       </div>
     </div>
@@ -277,6 +304,8 @@
 <script>
   $(document).ready(function () {
     const url = "{% url 'order_input' %}";
+    // SortableJSの初期化
+
     //テーブルの準備
     const table = new DataTable("#order_table", {
       ajax: {

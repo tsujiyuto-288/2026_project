@@ -295,6 +295,7 @@
 {% endblock content %} {% block extra_js %}
 <script>
   $(document).ready(function () {
+    const url = "{% url 'item_register' %}";
     let delete_item_no = {};
 
     // SortableJSの初期化
@@ -323,7 +324,7 @@
       ghostClass: "bg-light",
     });
 
-    const url = "{% url 'item_register' %}";
+    
     const table = new DataTable("#item_table", {
       ajax: {
         url: url,
