@@ -1,3 +1,4 @@
+from myapp.models import OrderProcess
 from django.http import JsonResponse, HttpResponse
 import json
 from django.shortcuts import render
@@ -135,13 +136,25 @@ class Order_input(View):
 
     def save_order(self,request):
         fields = json.loads(request.POST.get("fields"))
+        process_list = json.loads(request.POST.get("process"))
 
         orders = Order(**fields)
 
         if Order.objects.filter(order_no=orders.order_no).exists():
             return JsonResponse({"status": "error_duplicate", "message": orders.order_no})
-        
+
         orders.save()
+
+        order_process_list = []
+        for process in process_list:
+            order_process = OrderProcess(
+                order_id=process.get("order_no"),
+                process_id=process.get("process_id"),
+                process_turn=process.get("process_turn"),
+            )
+            order_process_list.append(order_process)
+        
+        OrderProcess.objects.bulk_create(order_process_list)
 
         return JsonResponse({"status": "success", "message": orders.order_no})
 
@@ -202,9 +215,6 @@ class Order_input(View):
         candidate_process_list = list(
             Process.objects.exclude(itemprocess__item_id=select_item_no).values()
         )
-
-        print(selected_process_list)
-        print(candidate_process_list)
 
         return JsonResponse({
             "process_list":selected_process_list,

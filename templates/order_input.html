@@ -458,13 +458,11 @@
 
     //出荷モーダルで出荷ボタンをクリック
     $("#shipping_order_btn").on("click", function () {
-      //const shipping_data_list = {};
       $("#shipping_content")
         .find("input")
         .each(function () {
           order_content[$(this).data("id")] = $(this).val();
         });
-
       order_content["order_no"] = order_no;
 
       $.ajax({
@@ -602,12 +600,24 @@
           return;
         }
       }
+      //実施工程の取得
+      let process_list = [];
+      $("#process_selected_list")
+        .find("li")
+        .each(function (i) {
+          process_list.push({
+            order_no: fields.order_no,
+            process_id: $(this).data("process_id"),
+            process_turn: i + 1,
+          });
+        });
 
       $.ajax({
         url: url,
         type: "POST",
         data: {
           fields: JSON.stringify(fields),
+          process: JSON.stringify(process_list),
           kubun: "save_order",
         },
         headers: CSRF_HEADER,

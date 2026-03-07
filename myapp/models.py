@@ -24,6 +24,7 @@ class Order(models.Model):
     shipping_order = models.BooleanField(default=False)
     shipping_date = models.CharField(max_length=50)
     shipping_quantity = models.CharField(max_length=50)
+    order_process = models.ManyToManyField('Process',through="OrderProcess")
 
 # 受注データと工程の中間テーブル
 class OrderProcess(models.Model):
