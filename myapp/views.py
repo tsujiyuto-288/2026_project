@@ -1,8 +1,7 @@
-from myapp.models import OrderProcess
 from django.http import JsonResponse, HttpResponse
 import json
 from django.shortcuts import render
-from .models import Item, Order, Process, ItemProcess
+from .models import Item, Order, Process, ItemProcess,OrderProcess
 from django.views import View
 import json
 
