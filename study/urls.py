@@ -26,4 +26,5 @@ urlpatterns = [
     path("shipping_list/",views.Shipping_list.as_view(), name="shipping_list"),
     path("process_list/",views.Process_list.as_view(),name="process_list"),
     path("progress_input/",views.progress_input.as_view(),name="progress_input"),
+    path("employee/",views.employee.as_view(),name="employee"),
 ]

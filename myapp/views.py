@@ -9,7 +9,6 @@ import json
 def dashbord_open(request):
     return render(request, 'dashbord.html')
 
-
 class Item_register(View):
     def get(self, request):
         items = list(Item.objects.all().values())
@@ -299,3 +298,7 @@ class Process_list(View):
 class progress_input(View):
     def get(self,request):
         return render(request,"progress_input.html")
+
+class employee(View):
+    def get(self,request):
+        return render(request,"employee.html")
