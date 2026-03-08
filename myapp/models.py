@@ -36,3 +36,9 @@ class OrderProcess(models.Model):
 class Process(models.Model):
     process_name = models.CharField(max_length=50)
     process_number = models.IntegerField()
+
+# 作業者データ
+class Employee(models.Model):
+    employee_name = models.CharField(max_length=50)
+    employee_number = models.IntegerField()
+    retired = models.BooleanField(default=False)#退職済みの場合True

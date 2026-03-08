@@ -1,7 +1,7 @@
 from django.http import JsonResponse, HttpResponse
 import json
 from django.shortcuts import render
-from .models import Item, Order, Process, ItemProcess,OrderProcess
+from .models import Item, Order, Process, ItemProcess,OrderProcess,Employee
 from django.views import View
 import json
 
@@ -302,3 +302,19 @@ class progress_input(View):
 class employee(View):
     def get(self,request):
         return render(request,"employee.html")
+
+    def post(self,request):
+        if request.POST.get("kubun") == "save":
+            return self.save(request)
+
+    def save(self,request):
+        fields = json.loads(request.POST.get("fields"))
+        
+        employee = Employee(**fields)
+
+        if Employee.objects.filter(employee_number=employee.employee_number).exists():
+            return JsonResponse({"status":"tyouhuku_error"})
+
+        employee.save()
+
+        return JsonResponse({"status":"success","employee_name":employee.employee_name})

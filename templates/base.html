@@ -266,6 +266,38 @@
           title: "失敗",
         });
       }
+
+      // 指定した親要素内の入力値（input, select等）をオブジェクトとして取得する
+      function getFieldValues($fieldID) {
+        const fields = {};
+        $($fieldID)
+          .find("input,select")
+          .each(function () {
+            switch ($(this).attr("type")) {
+              case "checkbox":
+                fields[$(this).data("id")] = $(this).prop("checked");
+                break;
+              default:
+                fields[$(this).data("id")] = $(this).val();
+            }
+          });
+        return fields;
+      }
+
+      // 指定した親要素内の入力値（input, select等）の入力欄を全て空にする
+      function resetFieldValues($fieldID) {
+        $($fieldID)
+          .find("input,select")
+          .each(function () {
+            switch ($(this).attr("type")) {
+              case "checkbox":
+                $(this).prop("checked", false);
+                break;
+              default:
+                $(this).val("");
+            }
+          });
+      }
     </script>
 
     <!--汎用的な固定の変数-->
