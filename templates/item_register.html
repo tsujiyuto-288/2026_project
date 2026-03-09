@@ -460,7 +460,25 @@
         table.ajax.reload();
         // 成功の場合
         if (response.status == "success") {
+          // データを一度リセットする
+          $("#process_candidate_list").empty();
+          $("#process_selected_list").empty();
+          // 選択済工程のセット
+          response.process_list.forEach(function (process) {
+            let selected_process_list = `
+              <li
+                class="list-group-item border rounded mb-2 shadow-sm d-flex align-items-center"
+                data-process_id="${process.id}"
+                style="cursor: grab">
+                <i class="bi bi-grip-vertical text-secondary me-2"></i>
+                ${process.process_name}
+              </li>
+            `;
+            $("#process_candidate_list").append(selected_process_list);
+          });
+
           resetFieldValues("#item_register_fields");
+
           LobiboxSuccess("品番" + response.message + "の登録に成功しました。");
         } else if (response.status == "error_duplicate") {
           LobiboxError("品番" + response.message + "が重複しています。");

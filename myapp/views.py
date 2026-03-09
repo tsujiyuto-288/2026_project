@@ -49,7 +49,10 @@ class Item_register(View):
 
         ItemProcess.objects.bulk_create(item_process_list)
 
-        return JsonResponse({"status": "success", "message": items.item_no})
+        # 工程のリセットようにprocessを取得する
+        process_list = list(Process.objects.all().values())
+
+        return JsonResponse({"status": "success", "message": items.item_no,"process_list":process_list})
 
     def delete_item(self, request):
         import json
