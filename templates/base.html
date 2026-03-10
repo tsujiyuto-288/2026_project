@@ -269,11 +269,12 @@
 
       // 指定した親要素内の入力値（input, select等）をオブジェクトとして取得する
       function getFieldValues($fieldID) {
+        console.log("test");
         const fields = {};
         $($fieldID)
           .find("input,select")
           .each(function () {
-            switch ($(this).attr("type")) {
+            switch ($(this).prop("type")) {
               case "checkbox":
                 fields[$(this).data("id")] = $(this).prop("checked");
                 break;
@@ -289,12 +290,31 @@
         $($fieldID)
           .find("input,select")
           .each(function () {
-            switch ($(this).attr("type")) {
+            switch ($(this).prop("type")) {
               case "checkbox":
                 $(this).prop("checked", false);
                 break;
               default:
                 $(this).val("");
+            }
+          });
+      }
+
+      // 指定した親要素内の入力値をセットする。
+      // fieldObjectは各入力フォームのdata-idをキーに持つオブジェクト
+      function setFieldValues($fieldID, fieldObject) {
+        $($fieldID)
+          .find("input,select")
+          .each(function () {
+            switch ($(this).prop("type")) {
+              case "checkbox":
+                $(this).prop("checked", fieldObject[$(this).data("id")]);
+                break;
+              case "select-one":
+                $(this).val(fieldObject[$(this).data("id")]).trigger("change");
+                break;
+              default:
+                $(this).val(fieldObject[$(this).data("id")]);
             }
           });
       }
