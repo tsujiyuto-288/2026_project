@@ -212,6 +212,7 @@
                 class="form-control"
                 data-id="item_no"
                 id="edit_order_item_no_modal"
+                disabled
               />
             </div>
             <div class="m-2">
@@ -236,12 +237,12 @@
           </div>
           <div class="col-md-6">
             <div class="m-2">
-              <label>単価</label>
-              <input class="form-control" data-id="order_price" />
+              <label>注番</label>
+              <input class="form-control" data-id="order_no" disabled />
             </div>
             <div class="m-2">
-              <label>注番</label>
-              <input class="form-control" data-id="order_no" />
+              <label>単価</label>
+              <input class="form-control" data-id="order_price" />
             </div>
           </div>
         </div>
@@ -364,7 +365,6 @@
 
     // コンテキストメニューの処理
     let order_no; //order_noはクリックしたテーブルの注文番号が入る。複数の関数で使用したいため外に出している。
-    let order_content = {};
     $.contextMenu({
       selector: ".order_input_table_tr",
       items: {
@@ -377,31 +377,11 @@
 
       callback: function (key, options) {
         const data = table.row(options.$trigger).data();
-        const item_no = data.item_no;
         order_no = data.order_no;
-
-        order_content["order_no"] = data.order_no;
-        order_content["item_no"] = data.item_no;
-        order_content["item_name"] = data.item_name;
-        order_content["order_price"] = data.order_price;
-        order_content["provisional_order"] = data.provisional_order;
 
         //編集選択時の処理
         if (key === "edit") {
-          $("#order_edit_modal_content")
-            .find("input")
-            .each(function () {
-              let form = $(this).data("id");
-              switch ($(this).attr("type")) {
-                case "checkbox":
-                  $(this).prop("checked", order_content[form]);
-                  break;
-                default:
-                  $(this).val(order_content[form]);
-              }
-            });
-
-          $("#edit_order_item_no_modal").prop("disabled", true);
+          setFieldValues("#order_edit_modal_content", data);
           $("#order_edit_modal").modal("show");
           //出荷選択時の処理
         } else if (key === "shipping") {
@@ -417,24 +397,14 @@
     //--------------｟編集モーダル内の処理｠--------------------
     //編集ボタンを押した時の処理
     $("#order_edit_btn").on("click", function () {
-      const order_edit_content = {};
-      $("#order_edit_modal_content")
-        .find("input")
-        .each(function () {
-          switch ($(this).attr("type")) {
-            case "checkbox":
-              order_edit_content[$(this).data("id")] = $(this).prop("checked");
-              break;
-            default:
-              order_edit_content[$(this).data("id")] = $(this).val();
-          }
-        });
+      console.log("編集ボタン");
+      const fields = getFieldValues("#order_edit_modal_content");
 
       $.ajax({
         url: url,
         type: "POST",
         data: {
-          data: JSON.stringify(order_edit_content),
+          data: JSON.stringify(fields),
           kubun: "edit_order",
         },
         headers: CSRF_HEADER,
@@ -458,6 +428,7 @@
 
     //出荷モーダルで出荷ボタンをクリック
     $("#shipping_order_btn").on("click", function () {
+      let order_content = {};
       $("#shipping_content")
         .find("input")
         .each(function () {

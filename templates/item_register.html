@@ -407,20 +407,7 @@
               $("#edit_process_candidate_list").append(candidate_process);
             });
           });
-          $("#editModal")
-            .find("input, select")
-            .each(function () {
-              switch ($(this).data("id")) {
-                case "item_deleted":
-                  $(this).prop("checked", data.item_deleted);
-                  break;
-                case "item_no":
-                  $(this).val(data.item_no).trigger("change");
-                  break;
-                default:
-                  $(this).val(data[$(this).data("id")]);
-              }
-            });
+          setFieldValues("#editModal", data);
           $("#editModal").modal("show");
           // 削除 を選択した場合
         } else if (key === "delete") {
