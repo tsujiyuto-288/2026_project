@@ -397,7 +397,6 @@
     //--------------｟編集モーダル内の処理｠--------------------
     //編集ボタンを押した時の処理
     $("#order_edit_btn").on("click", function () {
-      console.log("編集ボタン");
       const fields = getFieldValues("#order_edit_modal_content");
 
       $.ajax({
@@ -551,19 +550,7 @@
 
     //受注ボタンをクリックした時の処理
     $("#order_btn").on("click", function () {
-      let fields = {};
-
-      $("#order_input")
-        .find("input, select")
-        .each(function () {
-          switch ($(this).attr("type")) {
-            case "checkbox":
-              fields[$(this).data("id")] = $(this).prop("checked");
-              break;
-            default:
-              fields[$(this).data("id")] = $(this).val();
-          }
-        });
+      const fields = getFieldValues("#order_input");
 
       for (const check in fields) {
         if (fields[check] === "") {
@@ -571,6 +558,7 @@
           return;
         }
       }
+
       //実施工程の取得
       let process_list = [];
       $("#process_selected_list")
@@ -595,20 +583,7 @@
       }).done(function (response) {
         if (response.status == "success") {
           table.ajax.reload();
-          $("#order_input")
-            .find("input, select")
-            .each(function () {
-              switch ($(this).data("id")) {
-                case "provisional_order":
-                  $(this).prop("checked", false);
-                  break;
-                case "item_no":
-                  $(this).val("").trigger("change");
-                  break;
-                default:
-                  $(this).val("");
-              }
-            });
+          resetFieldValues("#order_input");
           LobiboxSuccess(response.message + "の登録に成功しました。");
           //重複の場合
         } else if (response.status == "error_duplicate") {
