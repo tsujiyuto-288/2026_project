@@ -141,15 +141,8 @@
       callback: function (key, options) {
         data = table.row(options.$trigger).data();
         if (key === "edit") {
-          $("#process_edit_modal .modal_content")
-            .find("input")
-            .each(function () {
-              switch ($(this).attr("type")) {
-                default:
-                  const key = $(this).data("id");
-                  $(this).val(data[key]);
-              }
-            });
+          console.log("編集");
+          getFieldValues("#process_edit_modal .modal_content");
           $("#process_edit_modal").modal("show");
           // 編集ボタンが押された時の処理
         } else if (key === "delete") {
@@ -163,21 +156,21 @@
     //---------工程編集モーダル-----------------
     //編集ボタンを押した時の処理
     $("#process_edit_modal .edit_btn").on("click", function () {
-      let error = false;//入力フォームに空欄項目があるかどうか入れる。
+      let error = false; //入力フォームに空欄項目があるかどうか入れる。
       const edit_process = {};
       edit_process["id"] = data["id"];
 
       $("#process_edit_modal .modal_content")
         .find("input")
         .each(function () {
-          switch ($(this).attr("type")) {
+          switch ($(this).prop("type")) {
             default:
               const inputVal = $(this).val();
               edit_process[$(this).data("id")] = inputVal;
               //入力がなかったとき、フロント側でバリデーションチェックする
               if (inputVal === "") {
                 $(this).addClass("is-invalid");
-                error = true;//入力がなかった場合、errorの値をtrueにする
+                error = true; //入力がなかった場合、errorの値をtrueにする
               } else {
                 $(this).removeClass("is-invalid");
               }
@@ -262,7 +255,7 @@
         .find("input")
         .each(function () {
           //後からcaseを追加できるようにswitch文で書いている
-          switch ($(this).attr("type")) {
+          switch ($(this).prop("type")) {
             default:
               register_process[$(this).data("id")] = $(this).val();
           }
