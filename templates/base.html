@@ -294,6 +294,9 @@
               case "checkbox":
                 $(this).prop("checked", false);
                 break;
+              case "select-one":
+                $(this).val("").trigger("change");
+                break;
               default:
                 $(this).val("");
             }
