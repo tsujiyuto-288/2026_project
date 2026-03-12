@@ -141,7 +141,6 @@
       callback: function (key, options) {
         data = table.row(options.$trigger).data();
         if (key === "edit") {
-          console.log("編集");
           getFieldValues("#process_edit_modal .modal_content");
           $("#process_edit_modal").modal("show");
           // 編集ボタンが押された時の処理

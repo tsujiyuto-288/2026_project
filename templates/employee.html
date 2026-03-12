@@ -58,6 +58,37 @@
     </div>
   </div>
 </div>
+
+<!--作業者編集モーダル-->
+<div class="modal fade" id="employee_edit_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="h5 modal-title">作業者 編集</h1>
+        <button type="button" class="btn-close close_modal_btn"></button>
+      </div>
+      <div class="modal-body modal_content">
+        <div class="mb-3">
+          <label>作業者番号</label>
+          <input class="form-control" type="number" data-id="employee_number" />
+          <div class="invalid-feedback">作業者番号を入力してください</div>
+        </div>
+        <div class="mb-3">
+          <label>工程名</label>
+          <input class="form-control" type="text" data-id="employee_name" />
+          <div class="invalid-feedback">作業者名を入力してください</div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-secondary close_modal_btn">
+          閉じる
+        </button>
+        <button type="button" class="btn btn-primary edit_btn">編集</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock content %} {% block extra_js %}
 <script>
   $(document).ready(function () {
@@ -76,11 +107,11 @@
       columns: [
         {
           data: "employee_number",
-          className: "text-start employee_input_table_tr",
+          className: "text-start employee_table_tr",
         },
         {
           data: "employee_name",
-          className: "text-start employee_input_table_tr",
+          className: "text-start employee_table_tr",
         },
       ],
       language: {
@@ -88,6 +119,56 @@
       },
     });
 
+    //-----------コンテキストメニュー------------
+    let data = {}; //編集元の作業者のデータ
+    $.contextMenu({
+      selector: ".employee_table_tr",
+      items: {
+        edit: { name: "編集", icon: "edit" },
+        delete: { name: "削除", icon: "delete" },
+        sep1: "------------",
+        quit: { name: "閉じる", icon: "quit" },
+      },
+      callback: function (key, options) {
+        data = table.row(options.$trigger).data();
+        if (key === "edit") {
+          getFieldValues("#employee_edit_modal .modal_content");
+          $("#employee_edit_modal").modal("show");
+          // 編集ボタンが押された時の処理
+        } else if (key === "delete") {
+          // 削除ボタンが押された時の処理
+          $("#employee_delete_modal").modal("show");
+        }
+      },
+    });
+
+    //---------作業者編集モーダル-----------------
+    //編集ボタンを押した時の処理
+    $("#employee_edit_modal .edit_btn").on("click", function () {
+      let error = false; //入力フォームに空欄項目があるかどうか入れる。
+      const edit_employee = {};
+      edit_employee["id"] = data["id"];
+
+      $("#employee_edit_modal .modal_content")
+        .find("input")
+        .each(function () {
+          switch ($(this).prop("type")) {
+            default:
+              const inputVal = $(this).val();
+              edit_employee[$(this).data("id")] = inputVal;
+              //入力がなかったとき、フロント側でバリデーションチェックする
+              if (inputVal === "") {
+                $(this).addClass("is-invalid");
+                error = true; //入力がなかった場合、errorの値をtrueにする
+              } else {
+                $(this).removeClass("is-invalid");
+              }
+          }
+        });
+      console.log(edit_employee);
+    });
+
+    // 登録ボタンクリック時の処理
     $("#save_btn").on("click", function () {
       const fields = getFieldValues("#employee_field");
 
