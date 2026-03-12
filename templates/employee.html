@@ -9,6 +9,18 @@
     </div>
 
     <div id="employee_field" class="card-body row gx-5">
+      <div class="col-md-6 d-flex flex-column gap-3">
+        <div>
+          <label>作業者番号</label>
+          <input
+            id="employee_number"
+            data-id="employee_number"
+            class="form-control"
+            placeholder="例:00001"
+            type="number"
+          />
+        </div>
+      </div>
       <div class="col-md-6">
         <div>
           <label>作業者名</label>
@@ -22,21 +34,27 @@
           />
         </div>
       </div>
-      <div class="col-md-6 d-flex flex-column gap-3">
-        <div>
-          <label>作業者番号</label>
-          <input
-            id="employee_number"
-            data-id="employee_number"
-            class="form-control"
-            placeholder="例:00001"
-            type="number"
-          />
-        </div>
-      </div>
     </div>
     <div class="d-flex justify-content-center py-3">
       <button id="save_btn" class="btn btn-primary btn-lg px-5">登録</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header py-3">
+      <h2 class="m-0 h4">作業者一覧</h2>
+    </div>
+    <div class="card-body">
+      <table id="employee_table" class="table table-striped table-hover w-100">
+        <thead>
+          <tr>
+            <th>作業者番号</th>
+            <th>作業者名</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
@@ -44,6 +62,31 @@
 <script>
   $(document).ready(function () {
     const url = "{% url 'employee' %}";
+
+    //テーブルの準備
+    const table = new DataTable("#employee_table", {
+      ajax: {
+        url: url,
+        type: "POST",
+        data: {
+          kubun: "get_table_item",
+        },
+        headers: CSRF_HEADER,
+      },
+      columns: [
+        {
+          data: "employee_number",
+          className: "text-start employee_input_table_tr",
+        },
+        {
+          data: "employee_name",
+          className: "text-start employee_input_table_tr",
+        },
+      ],
+      language: {
+        url: DataTable_language,
+      },
+    });
 
     $("#save_btn").on("click", function () {
       const fields = getFieldValues("#employee_field");

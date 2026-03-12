@@ -303,6 +303,9 @@ class employee(View):
     def post(self,request):
         if request.POST.get("kubun") == "save":
             return self.save(request)
+        if request.POST.get("kubun") == "get_table_item":
+            return self.get_table_item(request)
+        
 
     def save(self,request):
         fields = json.loads(request.POST.get("fields"))
@@ -315,3 +318,7 @@ class employee(View):
         employee.save()
 
         return JsonResponse({"status":"success","employee_name":employee.employee_name})
+
+    def get_table_item(self, request):
+        employee_list = list(Employee.objects.filter(retired=False).values())
+        return JsonResponse({"data": employee_list})
