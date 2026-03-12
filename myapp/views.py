@@ -20,8 +20,8 @@ class Item_register(View):
             return self.save_item(request)
         if request.POST.get("kubun") == "delete_item":
             return self.delete_item(request)
-        if request.POST.get("kubun") == "get_item":
-            return self.get_item(request)
+        if request.POST.get("kubun") == "get_table_item":
+            return self.get_table_item(request)
         if request.POST.get("kubun") == "edit_item":
             return self.edit_item(request)
         if request.POST.get("kubun") == "get_edit_process_list":
@@ -65,7 +65,7 @@ class Item_register(View):
         
         return JsonResponse({"status": "success", "message": item_no})
         
-    def get_item(self, request):
+    def get_table_item(self, request):
         items = list(Item.objects.all().values())
         return JsonResponse({"data": items})
 
@@ -118,8 +118,8 @@ class Order_input(View):
         return render(request, "order_input.html",{"items": items,"process_list": process_list})
 
     def post(self, request):
-        if request.POST.get("kubun") == "get_item":
-            return self.get_item(request)
+        if request.POST.get("kubun") == "get_table_item":
+            return self.get_table_item(request)
         if request.POST.get("kubun") == "save_order":
             return self.save_order(request)
         if request.POST.get("kubun") == "shipping_order":
@@ -155,7 +155,7 @@ class Order_input(View):
 
         return JsonResponse({"status": "success", "message": orders.order_no})
 
-    def get_item(self,request):
+    def get_table_item(self,request):
         orders = list(Order.objects.filter(shipping_order=False).values())
         return JsonResponse({"data": orders})
 
@@ -224,12 +224,12 @@ class Shipping_list(View):
         return render(request, 'shipping_list.html')
     
     def post(self,request):
-        if request.POST.get("kubun")== "get_item":
-            return self.get_item(request)
+        if request.POST.get("kubun")== "get_table_item":
+            return self.get_table_item(request)
         if request.POST.get("kubun")=="cancel_shipping":
             return self.cancel_shipping(request)
 
-    def get_item(self,request):
+    def get_table_item(self,request):
         shippings = list(Order.objects.filter(shipping_order=True).values())
         return JsonResponse({"data":shippings})
 
@@ -246,8 +246,8 @@ class Process_list(View):
         return render(request,"process_list.html")
 
     def post(self,request):
-        if request.POST.get("kubun") == "get_item":
-            return self.get_item(request)
+        if request.POST.get("kubun") == "get_table_item":
+            return self.get_table_item(request)
         if request.POST.get("kubun") =="save_process":
             return self.save_process(request)
         if request.POST.get("kubun") == "edit_process":
@@ -255,7 +255,7 @@ class Process_list(View):
         if request.POST.get("kubun") == "delete_process":
             return self.delete_process(request)
 
-    def get_item(self,request):
+    def get_table_item(self,request):
         process_list = list(Process.objects.order_by("process_number").values())
         return JsonResponse({"data":process_list})
 
