@@ -3,7 +3,6 @@ import json
 from django.shortcuts import render
 from .models import Item, Order, Process, ItemProcess,OrderProcess,Employee
 from django.views import View
-import json
 
 
 def dashbord_open(request):
@@ -49,13 +48,12 @@ class Item_register(View):
 
         ItemProcess.objects.bulk_create(item_process_list)
 
-        # 工程のリセットようにprocessを取得する
+        # 工程のリセット用にprocessを取得する
         process_list = list(Process.objects.all().values())
 
         return JsonResponse({"status": "success", "message": items.item_no,"process_list":process_list})
 
     def delete_item(self, request):
-        import json
         fields = json.loads(request.POST.get('fields'))
 
         item_no = fields["item_no"]
@@ -97,8 +95,6 @@ class Item_register(View):
         return JsonResponse({"status":"success"})
 
     def get_edit_process_list(self, request):
-        import json
-        
         select_item_no = json.loads(request.POST.get("item_no"))
 
         #選択済工程の取得
@@ -221,8 +217,6 @@ class Order_input(View):
             "process_list":selected_process_list,
             "candidate_process_list":candidate_process_list
         })
-
-
 
 
 class Shipping_list(View):
