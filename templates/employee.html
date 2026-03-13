@@ -74,7 +74,7 @@
           <div class="invalid-feedback">作業者番号を入力してください</div>
         </div>
         <div class="mb-3">
-          <label>工程名</label>
+          <label>作業者名</label>
           <input class="form-control" type="text" data-id="employee_name" />
           <div class="invalid-feedback">作業者名を入力してください</div>
         </div>
@@ -133,6 +133,7 @@
         data = table.row(options.$trigger).data();
         if (key === "edit") {
           getFieldValues("#employee_edit_modal .modal_content");
+          setFieldValues("#employee_edit_modal", data);
           $("#employee_edit_modal").modal("show");
           // 編集ボタンが押された時の処理
         } else if (key === "delete") {
@@ -165,7 +166,23 @@
               }
           }
         });
-      console.log(edit_employee);
+      $.ajax({
+        url: url,
+        type: "POST",
+        data: {
+          fields: JSON.stringify(edit_employee),
+          kubun: "edit_employee",
+        },
+        headers: CSRF_HEADER,
+      }).done(function (response) {
+        if (response.status === "success") {
+          table.ajax.reload();
+          $("#employee_edit_modal").modal("hide");
+          LobiboxSuccess("編集に成功しました");
+        } else if (response.status === "tyouhuku_error") {
+          LobiboxError("作業者番号が重複しています");
+        }
+      });
     });
 
     // 登録ボタンクリック時の処理

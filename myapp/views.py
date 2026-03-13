@@ -305,6 +305,9 @@ class employee(View):
             return self.save(request)
         if request.POST.get("kubun") == "get_table_item":
             return self.get_table_item(request)
+        if request.POST.get("kubun") == "edit_employee":
+            return self.edit_employee(request)
+
         
 
     def save(self,request):
@@ -322,3 +325,18 @@ class employee(View):
     def get_table_item(self, request):
         employee_list = list(Employee.objects.filter(retired=False).values())
         return JsonResponse({"data": employee_list})
+
+    def edit_employee(self,request):
+        edit_employee = json.loads(request.POST.get("fields"))
+
+        if Employee.objects.filter(employee_number=edit_employee.get("employee_number")).exclude(id=edit_employee.get("id")).exists():
+            return JsonResponse({"status":"tyouhuku_error"})
+        
+        test = {
+            "employee_name" : edit_employee.get("employee_name"),
+            "employee_number" : edit_employee.get("employee_number")
+        }
+        
+        Employee.objects.filter(id=edit_employee.get("id")).update(**test)
+        
+        return JsonResponse({"status":"success"})
