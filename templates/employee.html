@@ -208,6 +208,11 @@
         }
       });
     });
+
+    // 閉じるボタンクリック時の処理
+    $("#employee_edit_modal .close_modal_btn").on("click", function () {
+      $("#employee_edit_modal").modal("hide");
+    });
   });
 </script>
 {% endblock %}
