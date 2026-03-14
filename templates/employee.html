@@ -166,6 +166,9 @@
               }
           }
         });
+      if (error === true) {
+        return;
+      }
       $.ajax({
         url: url,
         type: "POST",
