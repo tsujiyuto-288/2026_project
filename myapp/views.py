@@ -307,6 +307,8 @@ class employee(View):
             return self.get_table_item(request)
         if request.POST.get("kubun") == "edit_employee":
             return self.edit_employee(request)
+        if request.POST.get("kubun") == "delete_employee":
+            return self.delete_employee(request)
 
         
 
@@ -339,4 +341,11 @@ class employee(View):
         
         Employee.objects.filter(id=edit_employee.get("id")).update(**test)
         
+        return JsonResponse({"status":"success"})
+    
+    def delete_employee(self,request):
+        employee_id = request.POST.get("data")
+        
+        Employee.objects.filter(id=employee_id).delete()
+
         return JsonResponse({"status":"success"})

@@ -89,6 +89,28 @@
   </div>
 </div>
 
+<!-- 作業者削除モーダル -->
+<div class="modal fade" id="employee_delete_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="h5 modal-title">作業者 削除</h1>
+        <button type="button" class="btn-close close_modal_btn"></button>
+      </div>
+
+      <div class="modal-body text-center">
+        <p class="fs-3 m-2">作業者を削除しますか？</p>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-secondary close_modal_btn">
+          閉じる
+        </button>
+        <button type="button" class="btn btn-primary delete_btn">削除</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock content %} {% block extra_js %}
 <script>
   $(document).ready(function () {
@@ -144,6 +166,11 @@
     });
 
     //---------作業者編集モーダル-----------------
+    // 閉じるボタンクリック時の処理
+    $("#employee_edit_modal .close_modal_btn").on("click", function () {
+      $("#employee_edit_modal").modal("hide");
+    });
+
     //編集ボタンを押した時の処理
     $("#employee_edit_modal .edit_btn").on("click", function () {
       let error = false; //入力フォームに空欄項目があるかどうか入れる。
@@ -212,9 +239,33 @@
       });
     });
 
+    //---------作業者削除モーダル-----------------
     // 閉じるボタンクリック時の処理
-    $("#employee_edit_modal .close_modal_btn").on("click", function () {
-      $("#employee_edit_modal").modal("hide");
+    $("#employee_delete_modal .close_modal_btn").on("click", function () {
+      $("#employee_delete_modal").modal("hide");
+    });
+
+    $("#employee_delete_modal .delete_btn").on("click", function () {
+      // 削除ボタンをクリックした時の処理
+      $.ajax({
+        url: url,
+        type: "POST",
+        data: {
+          data: data.id,
+          kubun: "delete_employee",
+        },
+        headers: CSRF_HEADER,
+      }).done(function (response) {
+        if (response.status === "success") {
+          table.ajax.reload();
+          $("#employee_delete_modal").modal("hide");
+          LobiboxSuccess(
+            "作業者No  " + data.employee_number + "  の削除に成功しました。",
+          );
+        } else {
+          alert("想定外のエラーが発生しました。");
+        }
+      });
     });
   });
 </script>
