@@ -19,7 +19,7 @@
             <th>出荷数</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="table_body">
           <tr></tr>
         </tbody>
       </table>
@@ -84,7 +84,7 @@
     //-----------コンテキストメニュー------------
     let shipping_data = {}; //現状は注番情報しか使わないが後々機能が追加される可能性があるため
     $.contextMenu({
-      selector: ".shipping_table_tr",
+      selector: "#table_body .shipping_table_tr",
       items: {
         cancel: { name: "取消", icon: "delete" },
         sep1: "------------",

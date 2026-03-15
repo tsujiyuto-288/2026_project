@@ -142,7 +142,7 @@
             <th>廃番</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="table_body">
           <tr></tr>
         </tbody>
       </table>
@@ -357,7 +357,7 @@
 
     //コンテキストメニューの処理
     $.contextMenu({
-      selector: ".item_register_table_tr",
+      selector: "#table_body .item_register_table_tr",
       items: {
         edit: { name: "編集", icon: "edit" },
         delete: { name: "削除", icon: "delete" },

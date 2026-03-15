@@ -151,7 +151,7 @@
             <th>仮受注</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="table_body">
           <tr></tr>
         </tbody>
       </table>
@@ -366,7 +366,7 @@
     // コンテキストメニューの処理
     let order_no; //order_noはクリックしたテーブルの注文番号が入る。複数の関数で使用したいため外に出している。
     $.contextMenu({
-      selector: ".order_input_table_tr",
+      selector: "#table_body .order_input_table_tr",
       items: {
         edit: { name: "編集", icon: "edit" },
         shipping: { name: "出荷", icon: "bi bi-truck" },

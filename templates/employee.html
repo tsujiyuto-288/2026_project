@@ -51,7 +51,7 @@
             <th>作業者名</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="table_body">
           <tr></tr>
         </tbody>
       </table>
@@ -144,7 +144,7 @@
     //-----------コンテキストメニュー------------
     let data = {}; //編集元の作業者のデータ
     $.contextMenu({
-      selector: ".employee_table_tr",
+      selector: "#table_body .employee_table_tr",
       items: {
         edit: { name: "編集", icon: "edit" },
         delete: { name: "削除", icon: "delete" },
