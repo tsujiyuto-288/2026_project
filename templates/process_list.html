@@ -141,7 +141,7 @@
       callback: function (key, options) {
         data = table.row(options.$trigger).data();
         if (key === "edit") {
-          getFieldValues("#process_edit_modal .modal_content");
+          setFieldValues("#process_edit_modal", data);
           $("#process_edit_modal").modal("show");
           // 編集ボタンが押された時の処理
         } else if (key === "delete") {
@@ -273,6 +273,7 @@
         if (request.status === "error_tyouhuku") {
           LobiboxError("工程Noが重複しています");
         } else if (request.status === "success") {
+          resetFieldValues("#process_register_modal");
           LobiboxSuccess("登録に成功しました");
         } else {
           alert("想定外のエラーが発生しました。");
