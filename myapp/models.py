@@ -41,3 +41,9 @@ class Employee(models.Model):
     employee_name = models.CharField(max_length=50)
     employee_number = models.IntegerField()
     retired = models.BooleanField(default=False)#退職済みの場合True
+
+# # 進捗データ
+# class Progress(models.Model):
+#     employee_name = models.CharField(max_length=50)
+#     employee_number = models.IntegerField()
+#     retired = models.BooleanField(default=False)#退職済みの場合True
