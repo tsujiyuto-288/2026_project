@@ -202,7 +202,10 @@ class Order_input(View):
     #品番が変更されたときに、アイテムマスターに登録された実施工程をとってくる関数
     def select_item(self,request):
         select_item_no = request.POST.get("item_no")
-        print(select_item_no)
+
+        item = Item.objects.filter(item_no=select_item_no).values("item_name").first()
+        print(item)
+        print(type(item))
 
         #選択済工程の取得
         selected_process_list = list(
@@ -215,7 +218,8 @@ class Order_input(View):
 
         return JsonResponse({
             "process_list":selected_process_list,
-            "candidate_process_list":candidate_process_list
+            "candidate_process_list":candidate_process_list,
+            "item_name":item.get("item_name"),
         })
 
 

@@ -47,13 +47,14 @@
           </div>
         </div>
         <div class="mb-3">
-          <label class="form-label">品名</label>
+          <label class="form-label">品名 (確認用)</label>
           <input
             class="form-control w-100"
             id="item_name"
             data-id="item_name"
             type="text"
             placeholder="品名"
+            disabled
           />
         </div>
         <div>
@@ -516,6 +517,9 @@
         },
         headers: CSRF_HEADER,
       }).done(function (response) {
+        // 表示(確認)用に品名を表示する
+        $("#item_name").val(response.item_name);
+
         // データを一度リセットする
         $("#process_selected_list").empty();
         $("#process_candidate_list").empty();

@@ -16,8 +16,7 @@ class ItemProcess(models.Model):
 
 # 受注データ
 class Order(models.Model):
-    item_name = models.CharField(max_length=50)
-    item_no = models.CharField(max_length=50)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
     order_price =  models.IntegerField()
     order_no = models.CharField(max_length=50,primary_key=True)
     provisional_order = models.BooleanField(default=False)
@@ -28,7 +27,7 @@ class Order(models.Model):
 
 # 受注データと工程の中間テーブル
 class OrderProcess(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)#引き当てられている受注
     process = models.ForeignKey('Process', on_delete=models.CASCADE)
     process_turn = models.IntegerField()#工程の順番が入る(1とか2とか)
 
