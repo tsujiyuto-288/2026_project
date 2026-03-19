@@ -422,6 +422,21 @@
       // フィールドの値を取得
       const fields = getFieldValues("#item_register_fields");
 
+      if (fields["item_no"] === "") {
+        LobiboxError("品番が入力されていません。");
+        return;
+      }
+
+      if (fields["item_name"] === "") {
+        LobiboxError("品名が入力されていません。");
+        return;
+      }
+
+      if (fields["item_price"] === "") {
+        LobiboxError("単価が入力されていません。");
+        return;
+      }
+
       //実施工程ののリストを作成
       let process_list = [];
       $("#process_selected_list")
