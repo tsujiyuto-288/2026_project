@@ -219,6 +219,21 @@
     $("#save_btn").on("click", function () {
       const fields = getFieldValues("#employee_field");
 
+      if (fields["employee_number"] === "" && fields["employee_name"] === "") {
+        LobiboxError("作業者情報が入力されていません。");
+        return;
+      }
+
+      if (fields["employee_number"] === "") {
+        LobiboxError("作業者Noが入力されていません。");
+        return;
+      }
+
+      if (fields["employee_name"] === "") {
+        LobiboxError("作業者名が入力されていません。");
+        return;
+      }
+
       $.ajax({
         url: url,
         type: "POST",
