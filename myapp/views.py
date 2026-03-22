@@ -1,8 +1,11 @@
 from django.http import JsonResponse, HttpResponse
 import json
 from django.shortcuts import render
-from .models import Item, Order, Process, ItemProcess,OrderProcess,Employee
 from django.views import View
+from .models import (
+    Item, Order, Customer, ItemProcess, Process, Employee,
+    Shipping,Instructions,ProductionProcess,Progress,Allocation
+    )
 
 
 def dashbord_open(request):
