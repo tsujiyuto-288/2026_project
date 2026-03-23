@@ -55,6 +55,45 @@
             type="text"
           />
         </div>
+        <div>
+          <label>実施工程</label>
+          <div class="d-flex gap-3">
+            <div class="border rounded p-3 w-50 bg-light">
+              <span class="text-secondary fw-bold small d-block mb-3"
+                ><i class="bi bi-list-task me-2"></i>実施工程</span
+              >
+              <ul
+                id="process_selected_list"
+                class="list-group"
+                style="min-height: 150px"
+              ></ul>
+            </div>
+            <div class="border rounded p-3 w-50 bg-light">
+              <span class="text-secondary fw-bold small d-block mb-3"
+                ><i class="bi bi-play-circle-fill me-2"></i>未選択工程</span
+              >
+              <ul
+                id="process_candidate_list"
+                data-id="process_list"
+                class="list-group"
+                style="min-height: 150px"
+              >
+                {% for process in process_list %}
+                <li
+                  class="list-group-item border rounded mb-2 shadow-sm d-flex align-items-center"
+                  data-process_id="{{ process.id }}"
+                  style="cursor: grab"
+                >
+                  <i class="bi bi-grip-vertical text-secondary me-2"></i>
+                  <!--改行されるとバグるのでprettierによって改行されないように-->
+                  <!-- prettier-ignore -->
+                  {{process.process_name }}
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="col-md-6 d-flex flex-column gap-3">
         <div class="mb-3">
@@ -68,7 +107,7 @@
             type="number"
           />
         </div>
-        <div class="h-50 d-flex align-items-center">
+        <div class="d-flex align-items-center" style="height: 80px">
           <div class="form-check">
             <input
               class="form-check-input"
@@ -79,48 +118,16 @@
             <label class="form-check-label" for="item_deleted"> 廃番 </label>
           </div>
         </div>
-      </div>
-      <div class="row gx-5">
-        <div class="col-md-6">
-          <div>
-            <label>実施工程</label>
-            <div class="d-flex gap-3">
-              <div class="border rounded p-3 w-50 bg-light">
-                <span class="text-secondary fw-bold small d-block mb-3"
-                  ><i class="bi bi-list-task me-2"></i>実施工程</span
-                >
-                <ul
-                  id="process_selected_list"
-                  class="list-group"
-                  style="min-height: 150px"
-                ></ul>
-              </div>
-              <div class="border rounded p-3 w-50 bg-light">
-                <span class="text-secondary fw-bold small d-block mb-3"
-                  ><i class="bi bi-play-circle-fill me-2"></i>未選択工程</span
-                >
-                <ul
-                  id="process_candidate_list"
-                  data-id="process_list"
-                  class="list-group"
-                  style="min-height: 150px"
-                >
-                  {% for process in process_list %}
-                  <li
-                    class="list-group-item border rounded mb-2 shadow-sm d-flex align-items-center"
-                    data-process_id="{{ process.id }}"
-                    style="cursor: grab"
-                  >
-                    <i class="bi bi-grip-vertical text-secondary me-2"></i>
-                    <!--改行されるとバグるのでprettierによって改行されないように-->
-                    <!-- prettier-ignore -->
-                    {{process.process_name }}
-                  </li>
-                  {% endfor %}
-                </ul>
-              </div>
-            </div>
-          </div>
+        <div class="mb-3">
+          <label>備考</label>
+          <textarea
+            id="item_note"
+            data-id="item_note"
+            class="form-control"
+            placeholder="備考"
+            maxlength="200"
+            type="text"
+          ></textarea>
         </div>
       </div>
     </div>
@@ -216,32 +223,6 @@
                 <input class="form-control" data-id="item_name" />
               </div>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="ms-3 mb-3">
-              <div>
-                <label>単価</label>
-                <input class="form-control" data-id="item_price" />
-              </div>
-            </div>
-            <div class="mb-3 ms-3 content h-50 d-flex align-items-center">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="item_deleted"
-                  data-id="item_deleted"
-                />
-                <label class="form-check-label" for="item_deleted">
-                  廃番
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-6">
             <div class="ms-3 mb-3">
               <label>実施工程</label>
               <div class="d-flex gap-3">
@@ -271,6 +252,41 @@
                   </ul>
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="ms-3 mb-3">
+              <div>
+                <label>単価</label>
+                <input class="form-control" data-id="item_price" />
+              </div>
+            </div>
+            <div
+              class="mb-3 ms-3 content d-flex align-items-center"
+              style="height: 80px"
+            >
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="item_deleted"
+                  data-id="item_deleted"
+                />
+                <label class="form-check-label" for="item_deleted">
+                  廃番
+                </label>
+              </div>
+            </div>
+            <div class="mb-3 ms-3">
+              <label>備考</label>
+              <textarea
+                id="item_note"
+                data-id="item_note"
+                class="form-control"
+                placeholder="備考"
+                maxlength="200"
+                type="text"
+              ></textarea>
             </div>
           </div>
         </div>
@@ -367,7 +383,7 @@
 
       callback: function (key, options) {
         const data = table.row(options.$trigger).data();
-        // 削除 を選択した場合
+        // 編集 を選択した場合
         if (key === "edit") {
           $.ajax({
             url: url,

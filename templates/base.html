@@ -271,7 +271,7 @@
       function getFieldValues($fieldID) {
         const fields = {};
         $($fieldID)
-          .find("input,select")
+          .find("input,select,textarea")
           .each(function () {
             switch ($(this).prop("type")) {
               case "checkbox":
@@ -287,7 +287,7 @@
       // 指定した親要素内の入力値（input, select等）の入力欄を全て空にする
       function resetFieldValues($fieldID) {
         $($fieldID)
-          .find("input,select")
+          .find("input,select,textarea")
           .each(function () {
             switch ($(this).prop("type")) {
               case "checkbox":
@@ -306,7 +306,7 @@
       // fieldObjectは各入力フォームのdata-idをキーに持つオブジェクト
       function setFieldValues($fieldID, fieldObject) {
         $($fieldID)
-          .find("input,select")
+          .find("input,select,textarea")
           .each(function () {
             switch ($(this).prop("type")) {
               case "checkbox":
