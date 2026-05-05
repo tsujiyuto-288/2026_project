@@ -1,8 +1,17 @@
 from django.contrib import admin
 from .models import (
-    Item, Order, Customer, ItemProcess, Process, Employee,
-    Shipping,Instructions,ProductionProcess,Progress,Allocation
-    )
+    Item,
+    Order,
+    Customer,
+    ItemProcess,
+    Process,
+    Employee,
+    Shipping,
+    Instructions,
+    ProductionProcess,
+    Progress,
+    Allocation,
+)
 
 admin.site.register(Item)
 admin.site.register(ItemProcess)
